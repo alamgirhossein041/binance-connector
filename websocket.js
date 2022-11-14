@@ -1,6 +1,5 @@
 import { EventEmitter } from "events"
 import { WebSocket as WsClient } from "ws"
-// import { Futures } from "./index.js"
 
 export class Websocket extends EventEmitter {
 
@@ -15,14 +14,9 @@ export class Websocket extends EventEmitter {
         this.api_secret = options.api_secret
     }
 
-    // async listenKey() {
-    //     return await this.rest.listenKey("POST")
-    // }
-
-    // async deleteListenKey() {
-    //     return await this.rest.listenKey("DELETE")
-    // }
-
+    /**
+     * @param {Number} wsID Example: 311
+     */
     unsubscribe(wsID) {
         let topic = this.wsTopics.get(wsID)
 
@@ -54,6 +48,17 @@ export class Websocket extends EventEmitter {
             id,
         }
 
+        ws.addListener("ping", (data) => {
+            console.log("Binance Said: Ping")
+            
+            ws.ping()
+            ws.pong()
+        })
+
+        ws.addListener("pong", (data) => {
+            console.log("We Said: Pong")
+        })
+
         ws.addEventListener("open", (event) => {
             ws.send(JSON.stringify(request))
             this.wsTopics.set(request.id, { ws, request })
@@ -66,6 +71,10 @@ export class Websocket extends EventEmitter {
         ws.addEventListener("error", (event) => console.log("Error Happens"))
     }
 
+    /**
+     * @param {String} path Example: "/ws/bnbusdt@aggTrade"
+     * @param {String} eventName Example: "Data"
+     */
     connect(path, eventName="Data") {
 
         let ws = new WsClient(this.baseURL + path)
@@ -98,99 +107,83 @@ import { config } from "./config.js"
 async function Boot() {
     let api_key = config.API_KEY
     let api_secret = config.API_SECRET
-
-    let rest = new Futures({
-        api_key,
-        api_secret,
-    })
-    let data = await rest.listenKey()
-    let listenKey = data.listenKey
     
     let ws = new Websocket({
         api_key,
         api_secret,
     })
 
-    ws.userStream(listenKey, "USER_DATA")
+    // ############################ Using Connect
+    // ws.connect("/ws/bnbusdt@kline_1m")
 
-    ws.addListener("USER_DATA", (socket) => {
+    // ws.addListener("Data", (socket) => {
+        
+    //     socket.addEventListener("message", (event) => {
+    //         let data = event.data
+    //         console.log(data)
+    //     })
+
+    //     new Promise((resolve, reject) => {
+    //         setTimeout(() => {
+                
+    //             socket.close()
+                
+    //             resolve()
+    //         }, 10000)
+    //     })
+    // })
+
+    // ############################ Using Subscribe
+    ws.subscribe(["btcusdt@kline_5m"], 1, "Data")
+
+    ws.addListener("Data", (socket) => {
         socket.addEventListener("message", (event) => {
-
-            let data = event.data
-            console.log(data)
+            // let data = event.data
+            // console.log(data)
         })
     })
     
-    new Promise((resolve, reject) => {
-        setTimeout(async () => {
-            await rest.listenKey("DELETE")
-            resolve()
-        }, (10000))
-    })
+    // new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         ws.unsubscribe(1)
+    //     }, 20000)
+
+    //     setTimeout(() => {
+    //         ws.unsubscribe(2)
+    //     }, 40000)
+
+    //     resolve()
+    // });
+
+    // ############################ User Stream
+    // let rest = new Futures({
+    //     api_key,
+    //     api_secret,
+    // })
+    // let data = await rest.listenKey()
+    // let listenKey = data.listenKey
+
+    // ws.userStream(listenKey, "USER_DATA")
+
+    // ws.addListener("USER_DATA", (socket) => {
+    //     socket.addEventListener("message", (event) => {
+
+    //         let data = event.data
+    //         console.log(data)
+    //     })
+    // })
+    
+    // new Promise((resolve, reject) => {
+    //     setTimeout(async () => {
+    //         await rest.listenKey("DELETE")
+    //         resolve()
+    //     }, (10000))
+    // })
 }
 Boot()
-
-// ws.userStream("USER_DATA")
-
-// ws.addListener("USER_DATA", (socket) => {
-    
-//     socket.addEventListener("message", (event) => {
-
-//         let data = event.data
-//         console.log(data)
-//     })
-
-// })
-
-// ws.listenKey()
-// ws.connect("/ws/bnbusdt@aggTrade")
-// ws.subscribe(["btcusdt@kline_3m"], 1)
-// ws.subscribe(["etcusdt@kline_3m"], 2)
-
-// new Promise((resolve, reject) => {
-//     resolve(
-//         setTimeout(() => {
-//             ws.unsubscribe(1)
-//             ws.unsubscribe(2)
-//         }, 10000)
-//     )
-// })
-
 /**
  * @TODO 1- add API_key API_secret
  * @TODO 2- add private subscribe
  * @TODO 3- add reconnect
  * @TODO 4- check ping/pong
  */
-
-// ws.subscribe(["btcusdt@kline_3m"], 1, "BTC")
-// ws.subscribe(["etcusdt@kline_1m"], 2)
-
-// ws.addListener("BTC", (socket) => {
-    
-//     console.log("BTC Event Name")
-//     socket.addEventListener("message", (event) => {
-//         let data = event.data
-//         console.log(data)
-//     })
-// })
-
-// ws.addListener("Data", (socket) => {
-//     // console.log(socket)
-
-//     console.log("Data Event Name")
-//     socket.addEventListener("message", (event) => {
-//         let data = event.data
-//         // try {
-//         //     data = JSON.parse(data)
-//         // } catch {}
-
-//         console.log(data)
-//         // if (data.s == "BTCUSDT") {
-//         //     console.log("BTC")
-//         // } else if (data.s == "ETCUSDT") {
-//         //     console.log("ETC")
-//         // }
-//     })
-
-// })
