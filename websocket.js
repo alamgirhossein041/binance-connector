@@ -49,7 +49,7 @@ export class Websocket extends EventEmitter {
         }
 
         ws.addListener("ping", (data) => {
-            console.log("Binance Said: Ping")
+            console.log(`${new Date()} - Binance Said: Ping`)
             
             ws.ping()
             ws.pong()
@@ -105,6 +105,7 @@ import { Futures } from "./index.js"
 import { config } from "./config.js"
 
 async function Boot() {
+
     let api_key = config.API_KEY
     let api_secret = config.API_SECRET
     
