@@ -63,7 +63,6 @@ export class Websocket extends EventEmitter {
             ws.send(JSON.stringify(request))
             this.wsTopics.set(request.id, { ws, request })
 
-            // Emit the ws => emit("message", event)
             this.emit(eventName, ws)
         })
 
@@ -101,8 +100,8 @@ export class Websocket extends EventEmitter {
 }
 
 
-import { Futures } from "./index.js"
-import { config } from "./config.js"
+import { Futures } from "../index.js"
+import { config } from "../config.js"
 
 async function Boot() {
 
@@ -184,7 +183,5 @@ async function Boot() {
 Boot()
 /**
  * @TODO 1- add API_key API_secret
- * @TODO 2- add private subscribe
  * @TODO 3- add reconnect
- * @TODO 4- check ping/pong
  */

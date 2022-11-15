@@ -7,25 +7,23 @@ const HmacSHA256 = crypto.HmacSHA256
 export class Futures {
     
     restEndPointTestNet = "https://testnet.binancefuture.com"
-    WsEndPointTestNet = "wss://stream.binancefuture.com"
     baseEndPoint = "https://fapi.binance.com"
-    wsEndPoint = ""
     timestamp = Date.now()
     recvWindow = 5000
-
-    // Request Header
-    // application/x-www-form-urlencoded
-    // X-MBX-APIKEY
-
-    // Response Header
-    // X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter) => X-MBX-USED-WEIGHT-1m => IP
-    // X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter) => X-MBX-ORDER-COUNT-1m => Order
 
     constructor(options = {}) {
         this.api_key = options.api_key
         this.api_secret = options.api_secret
     }
 
+    /**
+     * 
+     * @param {"GET" | "POST" | "PUT" | "DELETE"} method 
+     * @param {String} address https://fapi.binance.com/fapi/v1/ping
+     * @param {Object} params 
+     * @param {Boolean} isPrivate 
+     * @returns 
+     */
     async request(method, address, params={}, isPrivate=false) {
 
         try {
@@ -42,10 +40,22 @@ export class Futures {
             }
 
             
+            // Way1
+            // let queryString = ""
+            // let paramsList = Object.keys(_params)
+            // for (let index = 0; index < paramsList.length; index++) {
+            //     const key = paramsList[index]
+            //     const value = _params[key]
+
+            //     queryString += `&${key}=${value}`
+            // }
+            // queryString = queryString.slice(1)
+
+            // Way2
             const queryString = Object.keys(_params)
             .map((key) => `${key}=${_params[key]}`)
             .join("&")
-            
+
             let headers = {
                 "Accept": "application/x-www-form-urlencoded",
             }
@@ -66,7 +76,10 @@ export class Futures {
                 headers,
             })
 
-            let res = await data.json()
+            let res
+            if (data.status == 200) {
+                res = await data.json()
+            }
 
             console.log(res)
 
