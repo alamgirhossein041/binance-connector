@@ -3,24 +3,21 @@ import { WebSocket as WsClient } from "ws"
 
 export class Websocket extends EventEmitter {
 
-    baseURL = "wss://fstream.binance.com"
-    authURL = "wss://fstream-auth.binance.com"
-
     wsTopics = new Map()
 
     /**
      * @param {Object} options
      * @param {String} [options.api_key]
      * @param {String} [options.api_secret]
-     * @param {String} [options.baseURL]
-     * @param {String} [options.authURL]
+     * @param {String} [options.wsBaseURL]
+     * @param {String} [options.wsAuthURL]
      */
     constructor(options = {}) {
         super()
-        this.api_key    = options.api_key
-        this.api_secret = options.api_secret
-        this.baseURL    = options.baseURL
-        this.authURL    = options.authURL
+        this.api_key        = options.api_key
+        this.api_secret     = options.api_secret
+        this.wsBaseURL      = options.wsBaseURL
+        this.wsAuthURL      = options.wsAuthURL
     }
 
     /**
@@ -49,7 +46,7 @@ export class Websocket extends EventEmitter {
      */
     subscribe(params, id, eventName="Data") {
 
-        let ws = new WsClient(this.baseURL + "/ws")
+        let ws = new WsClient(this.wsBaseURL + "/ws")
 
         let request = {
             method: "SUBSCRIBE",
@@ -69,7 +66,13 @@ export class Websocket extends EventEmitter {
         })
 
         ws.addEventListener("open", (event) => {
+
+            console.log(`Subscribed to ${request.params}`)
+
+            // Ask binance
             ws.send(JSON.stringify(request))
+
+            // Add to subscribe list
             this.wsTopics.set(request.id, { ws, request })
 
             this.emit(eventName, ws)
@@ -85,7 +88,7 @@ export class Websocket extends EventEmitter {
      */
     connect(path, eventName="Data") {
 
-        let ws = new WsClient(this.baseURL + path)
+        let ws = new WsClient(this.wsBaseURL + path)
 
         ws.addEventListener("open", (event) => {
             console.log(`Connection Opened for: ${path}`)
@@ -189,7 +192,7 @@ async function Boot() {
     //     }, (10000))
     // })
 }
-Boot()
+// Boot()
 /**
  * @TODO 1- add API_key API_secret
  * @TODO 3- add reconnect
