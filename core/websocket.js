@@ -60,7 +60,7 @@ export class Websocket extends EventEmitter {
 
         let URL = this.wsBaseURL
         if (this.isTestNet) {
-            console.log("## Test Net ##")
+            console.log("## Websocket: Test Net ##")
             URL = this.wsBaseURLTest
         }
 
@@ -108,6 +108,7 @@ export class Websocket extends EventEmitter {
 
         let URL = this.wsBaseURL
         if (this.isTestNet) {
+            console.log("## Websocket: Test Net ##")
             URL = this.wsBaseURLTest
         }
 

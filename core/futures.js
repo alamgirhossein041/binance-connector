@@ -143,7 +143,7 @@ export class Futures extends Websocket {
 
     /**
      * 
-     * @param {"GET" | "POST" | "PUT" | "DELETE"} method 
+     * @param {"GET" | "POST" | "PUT" | "DELETE"} method Example: GET
      * @param {String} address Example: /fapi/v1/listenKey
      * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
      */
@@ -201,17 +201,28 @@ export class Futures extends Websocket {
     async changeMarginType(params) {
         return await this.privateRequest("POST", "/fapi/v1/marginType", params)
     }
+
+    /**
+     * @param {Object} params 
+     * @param {String} params.symbol
+     * @param {Number} params.leverage
+     * @param {Number} [params.recvWindow]
+     */
+    async changeLeverage(params) {
+        return await this.privateRequest("POST", "/fapi/v1/leverage", params)
+    }
 }
 
 
 async function Boot() {
     let f = new Futures({
-        api_key: config.API_KEY,
-        api_secret: config.API_SECRET,
-        isTestNet: false,
+        api_key: config.API_KEY_TEST,
+        api_secret: config.API_SECRET_TEST,
+        isTestNet: true,
+        recvWindow: 20000,
     })
 
-    let data = await f.listenKey("POST")
+    let data = await f.listenKey({method: "POST"})
     let listenKey = data.listenKey
 
     f.userStream(listenKey, "USER_DATA")
@@ -225,11 +236,15 @@ async function Boot() {
     })
     
     new Promise((resolve, reject) => {
-        setTimeout(async () => {
-            await f.changeMarginType({
+        setTimeout(() => {
+            f.changeMarginType({
                 marginType: "ISOLATED",
                 symbol: "BNBUSDT",
-                recvWindow: 20000,
+            })
+
+            f.changeLeverage({
+                leverage: 20,
+                symbol: "BTCUSDT",
             })
         }, (5000))
     })
