@@ -14,12 +14,12 @@ export class Futures extends Websocket {
     wsAuthURL       = "wss://fstream-auth.binance.com"
 
     timestamp = Date.now()
-    recvWindow = 5000
 
     /**
      * @param {Object} options
      * @param {String} [options.api_key]
      * @param {String} [options.api_secret]
+     * @param {Number} [options.recvWindow]
      * @param {Boolean} [options.isTestNet]
      */
     constructor(options = {}) {
@@ -32,7 +32,12 @@ export class Futures extends Websocket {
 
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
+        this.recvWindow = options.recvWindow
         this.isTestNet  = options.isTestNet
+
+        // Default values
+        this.recvWindow = this.recvWindow ?? 5000
+        this.isTestNet  = this.isTestNet  ?? false
     }
 
     /**
@@ -54,7 +59,7 @@ export class Futures extends Websocket {
                 address = this.baseURL + address
             }
 
-            let recvWindow = this.recvWindow
+            let recvWindow  = this.recvWindow
             if (params.recvWindow) {
                 recvWindow = params.recvWindow
                 delete params.recvWindow
@@ -66,7 +71,6 @@ export class Futures extends Websocket {
                 recvWindow,
             }
 
-            
             // Way1
             // let queryString = ""
             // let paramsList = Object.keys(_params)
@@ -127,87 +131,112 @@ export class Futures extends Websocket {
         }
     }
 
+    /**
+     * 
+     * @param {"GET" | "POST" | "PUT" | "DELETE"} method 
+     * @param {String} address Example: /fapi/v1/exchangeInfo
+     * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
+     */
     async publicRequest(method, address, params={}) {
         return this.request(method, address, params, false)
     }
 
+    /**
+     * 
+     * @param {"GET" | "POST" | "PUT" | "DELETE"} method 
+     * @param {String} address Example: /fapi/v1/listenKey
+     * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
+     */
     async privateRequest(method, address, params={}) {
         return this.request(method, address, params, true)
     }
 
     /**
-     * @param {"POST" | "DELETE"} method 
+     * @param { Object } params
+     * @param { "POST" | "DELETE" } params.method
+     * @param { Number } [params.recvWindow]
      */
-    async listenKey(method="POST") {
-        let params = {}
-        return await this.request(method, "/fapi/v1/listenKey", params, true)
+    async listenKey(params) {
+        if (!params.method) {
+            params.method = "POST"
+        }
+        return await this.privateRequest(params.method, "/fapi/v1/listenKey", params)
     }
 
     /**
-     * @TODO clean-up listen-key
      * 
-     * @param {"POST" | "DELETE"} method
-     * @returns {Promise<{listenKey: String}>}
+     * @param { Object } params 
+     * @param { String } params.symbol
+     * @param { Number } params.limit
+     * @param { Number } [params.recvWindow]
      */
-    async DEP_listenKey(method="POST") {
-        try {
-            let address = this.baseURL + "/fapi/v1/listenKey"
-            
-            let data = await fetch(address, {
-                method,
-                headers: {
-                    accept: "application/x-www-form-urlencoded",
-                    "X-MBX-APIKEY": this.api_key,
-                }
-            })
-
-            data = await data.json()
-            console.log(data)
-            return data
-        } catch {}
+    async trades(params) {
+        return await this.publicRequest("GET", "/fapi/v1/trades", params)
     }
 
     /**
-     * @param {String} symbol 
-     * @param {Number} limit 
-     * @returns {Promise<Array>}
-     */
-    async trades(symbol, limit) {
-        let params = { symbol, limit }
-        return this.request("GET", "/fapi/v1/trades", params)
-    }
-
-    /**
+     * @param { Object } params
+     * @param { Number } [params.recvWindow]
      * @returns {Promise<Object>}
      */
-    async accountInfo() {
-        return this.request("GET", "/fapi/v2/account", {}, true)
+    async accountInfo(params) {
+        return await this.privateRequest("GET", "/fapi/v2/account", params)
     }
 
-    
     /**
-     * 
-     * @param {String} symbol BTCUSDT, ETCUSDT
-     * @param {"ISOLATED" | "CROSSED"} marginType ISOLATED | CROSSED
-     * @returns {Promise<OutChangeMarginType>}
+     * @param { Object } params
+     * @param { Number } [params.recvWindow]
      */
-    async changeMarginType(symbol, marginType) {
-        let params = { symbol, marginType }
-        return this.request("POST", "/fapi/v1/marginType", params, true)
+    async exchangeInfo(params) {
+        return await this.publicRequest("GET", "/fapi/exchangeInfo", params)
     }
 
-    async exchangeInfo() {
-        let params = {}
-        return this.request("GET", "/fapi/v1/exchangeInfo", params)
+    /**
+     * @param { Object } params 
+     * @param { String } params.symbol BTCUSDT, ETCUSDT
+     * @param {"ISOLATED" | "CROSSED"} params.marginType ISOLATED | CROSSED
+     * @param { Number } [params.recvWindow]
+     * @returns { Promise<JSON> }
+     */
+    async changeMarginType(params) {
+        return await this.privateRequest("POST", "/fapi/v1/marginType", params)
     }
 }
 
-let f = new Futures({
-    api_key: config.API_KEY,
-    api_secret: config.API_SECRET,
-    isTestNet: false,
-})
-f.listenKey("POST")
+
+async function Boot() {
+    let f = new Futures({
+        api_key: config.API_KEY,
+        api_secret: config.API_SECRET,
+        isTestNet: false,
+    })
+
+    let data = await f.listenKey("POST")
+    let listenKey = data.listenKey
+
+    f.userStream(listenKey, "USER_DATA")
+
+    f.addListener("USER_DATA", (socket) => {
+        socket.addEventListener("message", (event) => {
+
+            let data = event.data
+            console.log(data)
+        })
+    })
+    
+    new Promise((resolve, reject) => {
+        setTimeout(async () => {
+            await f.changeMarginType({
+                marginType: "ISOLATED",
+                symbol: "BNBUSDT",
+                recvWindow: 20000,
+            })
+        }, (5000))
+    })
+}
+Boot()
+
+// f.listenKey("POST")
 // f.exchangeInfo()
 
 // f.changeMarginType("BTCUSDT", "CROSSED")

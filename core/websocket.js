@@ -1,6 +1,11 @@
 import { EventEmitter } from "events"
 import { WebSocket as WsClient } from "ws"
 
+/**
+ * @TODO 1- add API_key API_secret
+ * @TODO 3- add reconnect
+ */
+
 export class Websocket extends EventEmitter {
 
     wsTopics = new Map()
@@ -128,90 +133,3 @@ export class Websocket extends EventEmitter {
         this.connect(path, eventName)
     }
 }
-
-
-import { Futures } from "../index.js"
-import { config } from "../config.js"
-
-async function Boot() {
-
-    let api_key = config.API_KEY
-    let api_secret = config.API_SECRET
-    
-    let ws = new Websocket({
-        api_key,
-        api_secret,
-    })
-
-    // ############################ Using Connect
-    // ws.connect("/ws/bnbusdt@kline_1m")
-
-    // ws.addListener("Data", (socket) => {
-        
-    //     socket.addEventListener("message", (event) => {
-    //         let data = event.data
-    //         console.log(data)
-    //     })
-
-    //     new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-                
-    //             socket.close()
-                
-    //             resolve()
-    //         }, 10000)
-    //     })
-    // })
-
-    // ############################ Using Subscribe
-    ws.subscribe(["btcusdt@kline_5m"], 1, "Data")
-
-    ws.addListener("Data", (socket) => {
-        socket.addEventListener("message", (event) => {
-            // let data = event.data
-            // console.log(data)
-        })
-    })
-    
-    // new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //         ws.unsubscribe(1)
-    //     }, 20000)
-
-    //     setTimeout(() => {
-    //         ws.unsubscribe(2)
-    //     }, 40000)
-
-    //     resolve()
-    // });
-
-    // ############################ User Stream
-    // let rest = new Futures({
-    //     api_key,
-    //     api_secret,
-    // })
-    // let data = await rest.listenKey()
-    // let listenKey = data.listenKey
-
-    // ws.userStream(listenKey, "USER_DATA")
-
-    // ws.addListener("USER_DATA", (socket) => {
-    //     socket.addEventListener("message", (event) => {
-
-    //         let data = event.data
-    //         console.log(data)
-    //     })
-    // })
-    
-    // new Promise((resolve, reject) => {
-    //     setTimeout(async () => {
-    //         await rest.listenKey("DELETE")
-    //         resolve()
-    //     }, (10000))
-    // })
-}
-// Boot()
-/**
- * @TODO 1- add API_key API_secret
- * @TODO 3- add reconnect
- */
