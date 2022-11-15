@@ -8,10 +8,19 @@ export class Websocket extends EventEmitter {
 
     wsTopics = new Map()
 
+    /**
+     * @param {Object} options
+     * @param {String} [options.api_key]
+     * @param {String} [options.api_secret]
+     * @param {String} [options.baseURL]
+     * @param {String} [options.authURL]
+     */
     constructor(options = {}) {
         super()
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
+        this.baseURL    = options.baseURL
+        this.authURL    = options.authURL
     }
 
     /**
