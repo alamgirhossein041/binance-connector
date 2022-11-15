@@ -10,14 +10,18 @@ export class Websocket extends EventEmitter {
      * @param {String} [options.api_key]
      * @param {String} [options.api_secret]
      * @param {String} [options.wsBaseURL]
+     * @param {String} [options.wsBaseURLTest]
      * @param {String} [options.wsAuthURL]
+     * @param {Boolean} [options.isTestNet]
      */
     constructor(options = {}) {
         super()
         this.api_key        = options.api_key
         this.api_secret     = options.api_secret
         this.wsBaseURL      = options.wsBaseURL
+        this.wsBaseURLTest  = options.wsBaseURLTest
         this.wsAuthURL      = options.wsAuthURL
+        this.isTestNet      = options.isTestNet
     }
 
     /**
@@ -27,8 +31,11 @@ export class Websocket extends EventEmitter {
         let topic = this.wsTopics.get(wsID)
 
         if (topic) {
+            
             let ws      = topic.ws
             let request = topic.request
+
+            console.log(`Unsubscribe to ${request.params}`)
             
             request.method = "UNSUBSCRIBE"
 
@@ -46,7 +53,13 @@ export class Websocket extends EventEmitter {
      */
     subscribe(params, id, eventName="Data") {
 
-        let ws = new WsClient(this.wsBaseURL + "/ws")
+        let URL = this.wsBaseURL
+        if (this.isTestNet) {
+            console.log("## Test Net ##")
+            URL = this.wsBaseURLTest
+        }
+
+        let ws = new WsClient(URL + "/ws")
 
         let request = {
             method: "SUBSCRIBE",
@@ -88,7 +101,12 @@ export class Websocket extends EventEmitter {
      */
     connect(path, eventName="Data") {
 
-        let ws = new WsClient(this.wsBaseURL + path)
+        let URL = this.wsBaseURL
+        if (this.isTestNet) {
+            URL = this.wsBaseURLTest
+        }
+
+        let ws = new WsClient(URL + path)
 
         ws.addEventListener("open", (event) => {
             console.log(`Connection Opened for: ${path}`)

@@ -7,9 +7,10 @@ const HmacSHA256 = crypto.HmacSHA256
 
 export class Futures extends Websocket {
     
-    baseURLTestNet  = "https://testnet.binancefuture.com"
     baseURL         = "https://fapi.binance.com"
+    baseURLTest     = "https://testnet.binancefuture.com"
     wsBaseURL       = "wss://fstream.binance.com"
+    wsBaseURLTest   = "wss://stream.binancefuture.com"
     wsAuthURL       = "wss://fstream-auth.binance.com"
 
     timestamp = Date.now()
@@ -19,20 +20,19 @@ export class Futures extends Websocket {
      * @param {Object} options
      * @param {String} [options.api_key]
      * @param {String} [options.api_secret]
+     * @param {Boolean} [options.isTestNet]
      */
     constructor(options = {}) {
         super({
             ...options,
             wsAuthURL: "wss://fstream-auth.binance.com",
             wsBaseURL: "wss://fstream.binance.com",
+            wsBaseURLTest: "wss://stream.binancefuture.com",
         })
 
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
-    }
-
-    set wsBaseURL(value) {
-        value = "wss://fstream.binance.com"
+        this.isTestNet  = options.isTestNet
     }
 
     /**
@@ -46,6 +46,14 @@ export class Futures extends Websocket {
     async request(method, address, params={}, isPrivate=false) {
 
         try {
+
+            if (this.isTestNet) {
+                console.log("## Test Net ##")
+                address = this.baseURLTest + address
+            } else {
+                address = this.baseURL + address
+            }
+
             let recvWindow = this.recvWindow
             if (params.recvWindow) {
                 recvWindow = params.recvWindow
@@ -128,12 +136,22 @@ export class Futures extends Websocket {
     }
 
     /**
+     * @param {"POST" | "DELETE"} method 
+     */
+    async listenKey(method="POST") {
+        let params = {}
+        return await this.request(method, "/fapi/v1/listenKey", params, true)
+    }
+
+    /**
+     * @TODO clean-up listen-key
+     * 
      * @param {"POST" | "DELETE"} method
      * @returns {Promise<{listenKey: String}>}
      */
-    async listenKey(method="POST") {
+    async DEP_listenKey(method="POST") {
         try {
-            let address = this.baseEndPoint + "/fapi/v1/listenKey"
+            let address = this.baseURL + "/fapi/v1/listenKey"
             
             let data = await fetch(address, {
                 method,
@@ -146,20 +164,7 @@ export class Futures extends Websocket {
             data = await data.json()
             console.log(data)
             return data
-        } catch (error) {
-
-            let errorMessage = {
-                type: "error",
-                name: error.name,
-                message: error.message,
-            }
-
-            if (error instanceof TypeError) {}
-            if (error instanceof SyntaxError) {}
-
-            console.log("ListenKey:", errorMessage)
-            return errorMessage
-        }
+        } catch {}
     }
 
     /**
@@ -168,17 +173,15 @@ export class Futures extends Websocket {
      * @returns {Promise<Array>}
      */
     async trades(symbol, limit) {
-        let address = this.baseEndPoint + "/fapi/v1/trades"
         let params = { symbol, limit }
-        return this.request("GET", address, params)
+        return this.request("GET", "/fapi/v1/trades", params)
     }
 
     /**
      * @returns {Promise<Object>}
      */
     async accountInfo() {
-        let address = this.baseEndPoint + "/fapi/v2/account"
-        return this.request("GET", address, {}, true)
+        return this.request("GET", "/fapi/v2/account", {}, true)
     }
 
     
@@ -189,24 +192,38 @@ export class Futures extends Websocket {
      * @returns {Promise<OutChangeMarginType>}
      */
     async changeMarginType(symbol, marginType) {
-        let address = this.baseEndPoint + "/fapi/v1/marginType"
         let params = { symbol, marginType }
-        return this.request("POST", address, params, true)
+        return this.request("POST", "/fapi/v1/marginType", params, true)
+    }
+
+    async exchangeInfo() {
+        let params = {}
+        return this.request("GET", "/fapi/v1/exchangeInfo", params)
     }
 }
 
 let f = new Futures({
-    api_key: "myApiKey",
-    api_secret: "mySecretKey"
+    api_key: config.API_KEY,
+    api_secret: config.API_SECRET,
+    isTestNet: false,
 })
+f.listenKey("POST")
+// f.exchangeInfo()
 
-f.subscribe(["btcusdt@kline_1m"], 1, "BTC")
+// f.changeMarginType("BTCUSDT", "CROSSED")
 
-f.addListener("BTC", (socket) => {
+// f.subscribe(["btcusdt@kline_3m"], 1, "BTC")
+
+// f.addListener("BTC", (socket) => {
     
-    socket.addEventListener("message", (event) => {
-        let data = event.data
-        console.log(data)
-    })
+//     socket.addEventListener("message", (event) => {
+//         // let data = event.data
+//         // console.log(data)
+//     })
 
-})
+// })
+
+// new Promise((resolve, reject) => {
+//     setTimeout(() => f.unsubscribe(1), 10000)
+//     resolve()
+// })
