@@ -1,38 +1,34 @@
-import crypto from "crypto-js"
 import { Websocket } from "./websocket.js"
-import { config } from "../config.js"
+import { Http } from "./http.js"
 import("../types/futures.type.js")
 
-const HmacSHA256 = crypto.HmacSHA256
+import { config } from "../config.js"
 
 export class Futures extends Websocket {
     
-    baseURL         = "https://fapi.binance.com"
-    baseURLTest     = "https://testnet.binancefuture.com"
-    wsBaseURL       = "wss://fstream.binance.com"
-    wsBaseURLTest   = "wss://stream.binancefuture.com"
-    wsAuthURL       = "wss://fstream-auth.binance.com"
+    ApiMap = {
+        baseURL: "https://fapi.binance.com",
+        baseURLTest: "https://testnet.binancefuture.com",
+        wsAuthURL: "wss://fstream-auth.binance.com",
+        wsBaseURL: "wss://fstream.binance.com",
+        wsBaseURLTest: "wss://stream.binancefuture.com",
+    }
 
     timestamp = Date.now()
-
-    /**
-     * @param {Object} options
-     * @param {String} [options.api_key]
-     * @param {String} [options.api_secret]
-     * @param {Number} [options.recvWindow]
-     * @param {Boolean} [options.isTestNet]
-     */
 
     /**
      * @param {Constructor} options
      */
     constructor(options = {}) {
-        super({
+
+        const OPTIONS = {
             ...options,
-            wsAuthURL: "wss://fstream-auth.binance.com",
-            wsBaseURL: "wss://fstream.binance.com",
-            wsBaseURLTest: "wss://stream.binancefuture.com",
-        })
+            ...this.ApiMap,
+            timestamp: this.timestamp,
+        }
+
+        super(OPTIONS)
+
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
         this.recvWindow = options.recvWindow
@@ -41,106 +37,9 @@ export class Futures extends Websocket {
         // Default values
         this.recvWindow = this.recvWindow ?? 5000
         this.isTestNet  = this.isTestNet  ?? false
-    }
 
-    /**
-     * @type {Req}
-     */
-    async request(method, address, params={}, isPrivate=false) {
-
-        try {
-
-            if (this.isTestNet) {
-                console.log("## Test Net ##")
-                address = this.baseURLTest + address
-            } else {
-                address = this.baseURL + address
-            }
-
-            let recvWindow  = this.recvWindow
-            if (params.recvWindow) {
-                recvWindow = params.recvWindow
-                delete params.recvWindow
-            }
-
-            const _params = {
-                ...params,
-                timestamp: this.timestamp,
-                recvWindow,
-            }
-
-            // Way1
-            // let queryString = ""
-            // let paramsList = Object.keys(_params)
-            // for (let index = 0; index < paramsList.length; index++) {
-            //     const key = paramsList[index]
-            //     const value = _params[key]
-
-            //     queryString += `&${key}=${value}`
-            // }
-            // queryString = queryString.slice(1)
-
-            // Way2
-            const queryString = Object.keys(_params)
-            .map((key) => `${key}=${_params[key]}`)
-            .join("&")
-
-            let headers = {
-                "Accept": "application/x-www-form-urlencoded",
-            }
-            
-            if (isPrivate) {
-                const signature = HmacSHA256(queryString, this.api_secret).toString()    
-                address = address + "?" + queryString + "&signature=" + signature
-            } else {
-                address = address + "?" + queryString
-            }
-            
-            if (this.api_key) {
-                headers["X-MBX-APIKEY"] = this.api_key
-            }
-
-            let data = await fetch(address, {
-                method,
-                headers,
-            })
-
-            let res
-            if (data.status == 200) {
-                res = await data.json()
-            }
-
-            console.log(res)
-
-            return res
-        } catch (error) {
-
-            let errorMessage = {
-                type: "error",
-                name: error.name,
-                message: error.message,
-            }
-
-            if (error instanceof TypeError) {}
-            if (error instanceof SyntaxError) {}
-
-            console.log(errorMessage)
-            return errorMessage
-        }
-    }
-
-    /**
-     * @type {PublicRequest}
-     */
-    async publicRequest(method, address, params={}) {
-        return this.request(method, address, params, false)
-    }
-
-    /**
-     * @type {PrivateRequest}
-     */
-    async privateRequest(method, address, params={}) {
-        return this.request(method, address, params, true)
+        // Utils
+        this.http = new Http(OPTIONS)
     }
 
     /**
@@ -150,42 +49,42 @@ export class Futures extends Websocket {
         if (!params.method) {
             params.method = "POST"
         }
-        return await this.privateRequest(params.method, "/fapi/v1/listenKey", params)
+        return await this.http.privateRequest(params.method, "/fapi/v1/listenKey", params)
     }
 
     /**
      * @param { Trades } params 
      */
     async trades(params) {
-        return await this.publicRequest("GET", "/fapi/v1/trades", params)
+        return await this.http.publicRequest("GET", "/fapi/v1/trades", params)
     }
 
     /**
      * @param { AccountInfo } params
      */
     async accountInfo(params) {
-        return await this.privateRequest("GET", "/fapi/v2/account", params)
+        return await this.http.privateRequest("GET", "/fapi/v2/account", params)
     }
 
     /**
      * @param { ExchangeInfo } params
      */
     async exchangeInfo(params) {
-        return await this.publicRequest("GET", "/fapi/exchangeInfo", params)
+        return await this.http.publicRequest("GET", "/fapi/exchangeInfo", params)
     }
 
     /**
      * @param { ChangeMarginType } params 
      */
     async changeMarginType(params) {
-        return await this.privateRequest("POST", "/fapi/v1/marginType", params)
+        return await this.http.privateRequest("POST", "/fapi/v1/marginType", params)
     }
 
     /**
      * @param {ChangeLeverage} params 
      */
     async changeLeverage(params) {
-        return await this.privateRequest("POST", "/fapi/v1/leverage", params)
+        return await this.http.privateRequest("POST", "/fapi/v1/leverage", params)
     }
 }
 
@@ -201,9 +100,9 @@ async function Boot() {
     let data = await f.listenKey({method: "POST"})
     let listenKey = data.listenKey
 
-    f.userStream(listenKey, "USER_DATA")
+    f.ws.userStream(listenKey, "USER_DATA")
 
-    f.addListener("USER_DATA", (socket) => {
+    f.ws.addListener("USER_DATA", (socket) => {
         socket.addEventListener("message", (event) => {
 
             let data = event.data
