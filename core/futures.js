@@ -1,7 +1,7 @@
 import crypto from "crypto-js"
 import { Websocket } from "./websocket.js"
 import { config } from "../config.js"
-import("../types/futures.js")
+import("../types/futures.type.js")
 
 const HmacSHA256 = crypto.HmacSHA256
 
