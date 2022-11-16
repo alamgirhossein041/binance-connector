@@ -1,5 +1,6 @@
 import { EventEmitter } from "events"
 import { WebSocket as WsClient } from "ws"
+import("../types/websocket.types.js")
 
 /**
  * @TODO 1- add API_key API_secret
@@ -11,13 +12,7 @@ export class Websocket extends EventEmitter {
     wsTopics = new Map()
 
     /**
-     * @param {Object} options
-     * @param {String} [options.api_key]
-     * @param {String} [options.api_secret]
-     * @param {String} [options.wsBaseURL]
-     * @param {String} [options.wsBaseURLTest]
-     * @param {String} [options.wsAuthURL]
-     * @param {Boolean} [options.isTestNet]
+     * @param {Constructor} options
      */
     constructor(options = {}) {
         super()

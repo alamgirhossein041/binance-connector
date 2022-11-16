@@ -1,5 +1,4 @@
 /**
- * Futures constructor
  * @typedef {Object} Constructor
  * @property {String} [api_key]
  * @property {String} [api_secret]

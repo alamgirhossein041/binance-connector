@@ -4,7 +4,7 @@ import("../types/futures.type.js")
 
 import { config } from "../config.js"
 
-export class Futures extends Websocket {
+export class Futures {
     
     ApiMap = {
         baseURL: "https://fapi.binance.com",
@@ -27,8 +27,6 @@ export class Futures extends Websocket {
             timestamp: this.timestamp,
         }
 
-        super(OPTIONS)
-
         // Coming from constructor
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
@@ -38,6 +36,9 @@ export class Futures extends Websocket {
         // Default values
         this.recvWindow = this.recvWindow ?? 5000
         this.isTestNet  = this.isTestNet  ?? false
+
+        // Websocket
+        this.ws = new Websocket(OPTIONS)
 
         // Utils
         this.http = new Http(OPTIONS)
