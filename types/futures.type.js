@@ -8,7 +8,60 @@
  */
 
 // ################################### API
-// # Public
+// ########### ENUM
+/**
+ * @typedef {"FUTURE"} EnumSymbolType
+ */
+
+/**
+ * @typedef {"PERPETUAL" | "CURRENT_MONTH" | "CURRENT_MONTH" | "NEXT_MONTH" | "CURRENT_QUARTER" | "NEXT_QUARTER" | "PERPETUAL_DELIVERING"} EnumContractType
+ */
+
+/**
+ * @typedef {"PENDING_TRADING" | "TRADING" | "PRE_DELIVERING" | "DELIVERING" | "DELIVERED" | "PRE_SETTLE" | "SETTLING" | "CLOSE"} EnumContractStatus
+ */
+
+/**
+ * @typedef {"NEW" | "PARTIALLY_FILLED" | "FILLED" | "CANCELED" | "REJECTED" | "EXPIRED"} EnumOrderStatus
+ */
+
+/**
+ * @typedef {"LIMIT" | "MARKET" | "STOP" | "STOP_MARKET" | "TAKE_PROFIT" | "TAKE_PROFIT_MARKET" | "TRAILING_STOP_MARKET"} EnumOrderTypes
+ */
+ 
+/**
+ * @typedef {"BUY" | "SELL"} EnumOrderSide
+ */
+
+/**
+ * @typedef {"BOTH" | "LONG" | "SHORT"} EnumPositionSide
+ */
+
+/**
+ * @typedef {"GTC" | "IOC" | "FOK" | "GTX"} EnumTimeInForce
+ */
+
+/**
+ * @typedef {"MARK_PRICE" | "CONTRACT_PRICE"} EnumWorkingType
+ */
+
+/**
+ * @typedef {"ACK" | "RESULT"} EnumNewOrderRespType
+ */
+
+/**
+ * @typedef {"1m" | "3m" | "5m" | "15m" | "30m" | "1h" | "2h" | "4h" | "6h" | "8h" | "12h" | "1d" | "3d" | "1w" | "1M"} EnumIntervals
+ */
+
+/**
+ * @typedef {"REQUEST_WEIGHT" | "ORDERS"} EnumRateLimitType
+ */
+
+/**
+ * @typedef {"MINUTE"} EnumRateLimitInterval
+ */
+
+// ########### Public
 /**
  * @typedef {Object} FuturesJustRecvWindow
  * @property {Number} [recvWindow]
@@ -198,8 +251,20 @@
  * @property {String} [symbol]
  * @property {Number} [recvWindow]
  */
- 
-// # Private
+
+/**
+ * @typedef {Object} FuturesGetPmExchangeInfo
+ * @property {String} [symbol]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesPmAccountInfo
+ * @property {String} asset
+ * @property {Number} [recvWindow]
+ */
+
+// ########### Private
 /**
  * POST: /sapi/v1/futures/transfer
  * @typedef {Object} FuturesPostFuturesTransfer
