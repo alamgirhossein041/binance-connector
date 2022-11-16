@@ -1,5 +1,5 @@
 /**
- * @typedef {Object} Constructor
+ * @typedef {Object} HttpConstructor
  * @property {String} [api_key]
  * @property {String} [api_secret]
  * @property {Number} [recvWindow]
@@ -16,7 +16,7 @@
 
 /**
  * Request
- * @callback Req
+ * @callback HttpRequest
  * @param {"GET" | "POST" | "PUT" | "DELETE"} method
  * @param {String} address https://fapi.binance.com/fapi/v1/ping
  * @param {Object} params
@@ -25,7 +25,7 @@
  */
 
 /**
- * @callback PublicRequest
+ * @callback HttpPublicRequest
  * @param {"GET" | "POST" | "PUT" | "DELETE"} method
  * @param {String} address Example: /fapi/v1/exchangeInfo
  * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
@@ -33,7 +33,7 @@
  */
 
 /**
- * @callback PrivateRequest
+ * @callback HttpPrivateRequest
  * @param {"GET" | "POST" | "PUT" | "DELETE"} method Example: GET
  * @param {String} address Example: /fapi/v1/listenKey
  * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}

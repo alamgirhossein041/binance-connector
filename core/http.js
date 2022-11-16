@@ -6,7 +6,7 @@ export class Http {
     HmacSHA256 = CryptoJS.HmacSHA256
 
     /**
-     * @param {Constructor} options 
+     * @param {HttpConstructor} options 
      */
     constructor(options) {
 
@@ -21,7 +21,7 @@ export class Http {
     }
 
     /**
-     * @type {Req}
+     * @type {HttpRequestRequest}
      */
     async request(method, address, params = {}, isPrivate = false) {
         try {
@@ -110,14 +110,14 @@ export class Http {
     }
 
     /**
-     * @type {PublicRequest}
+     * @type {HttpPublicRequest}
      */
     async publicRequest(method, address, params = {}) {
         return this.request(method, address, params, false)
     }
 
     /**
-     * @type {PrivateRequest}
+     * @type {HttpPrivateRequest}
      */
     async privateRequest(method, address, params = {}) {
         return this.request(method, address, params, true)

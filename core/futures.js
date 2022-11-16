@@ -17,7 +17,7 @@ export class Futures {
     timestamp = Date.now()
 
     /**
-     * @param {Constructor} options
+     * @param {FuturesConstructor} options
      */
     constructor(options = {}) {
 
@@ -45,45 +45,94 @@ export class Futures {
     }
 
     /**
-     * @param { ListenKey } params
+     * @param {FuturesJustRecvWindow} params
      */
-    async listenKey(params) {
-        if (!params.method) {
-            params.method = "POST"
-        }
-        return await this.http.privateRequest(params.method, "/fapi/v1/listenKey", params)
+    async ping(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/ping", params)
     }
 
     /**
-     * @param { Trades } params 
+     * @param {FuturesJustRecvWindow} params
      */
-    async trades(params) {
-        return await this.http.publicRequest("GET", "/fapi/v1/trades", params)
+    async time(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/time", params)
     }
 
     /**
-     * @param { AccountInfo } params
+     * @param { FuturesJustRecvWindow } params
      */
-    async accountInfo(params) {
-        return await this.http.privateRequest("GET", "/fapi/v2/account", params)
-    }
-
-    /**
-     * @param { ExchangeInfo } params
-     */
-    async exchangeInfo(params) {
+     async exchangeInfo(params) {
         return await this.http.publicRequest("GET", "/fapi/exchangeInfo", params)
     }
 
     /**
-     * @param { ChangeMarginType } params 
+     * @param {FuturesDepth} params 
+     */
+    async depth(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/depth", params)
+    }
+
+    /**
+     * @param {FuturesTrades} params 
+     */
+     async trades(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/trades", params)
+    }
+
+    /**
+     * @param {FuturesHistoricalTrades} params 
+     */
+    async historicalTrades(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/historicalTrades", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async aggTrades(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/aggTrades", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.publicRequest("GET", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.publicRequest("GET", "", params)
+    }
+
+
+
+    /**
+     * @param { FuturesListenKey } params
+     */
+    async listenKey(params) {
+        params.method = params.method ?? "POST"
+        return await this.http.privateRequest(params.method, "/fapi/v1/listenKey", params)
+    }
+
+    /**
+     * @param { FuturesJustRecvWindow } params
+     */
+    async accountInfo(params) {
+        return await this.http.privateRequest("GET", "/fapi/v2/account", params)
+    }
+    
+    /**
+     * @param { FuturesChangeMarginType } params 
      */
     async changeMarginType(params) {
         return await this.http.privateRequest("POST", "/fapi/v1/marginType", params)
     }
 
     /**
-     * @param {ChangeLeverage} params 
+     * @param {FuturesChangeLeverage} params 
      */
     async changeLeverage(params) {
         return await this.http.privateRequest("POST", "/fapi/v1/leverage", params)
@@ -92,6 +141,14 @@ export class Futures {
 
 
 async function Boot() {
+    let f = new Futures({
+        isTestNet: true,
+    })
+
+    f.time()
+}
+
+async function _Boot() {
     let f = new Futures({
         api_key: config.API_KEY_TEST,
         api_secret: config.API_SECRET_TEST,
