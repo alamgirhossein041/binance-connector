@@ -61,6 +61,13 @@
  * @typedef {"MINUTE"} EnumRateLimitInterval
  */
 
+/**
+ * @typedef {"ISOLATED" | "CROSSED"} EnumMarginType
+ */
+
+/**
+ * @typedef {"LIQUIDATION" | "ADL"} EnumAutoCloseType
+ */
 // ########### Public
 /**
  * @typedef {Object} FuturesJustRecvWindow
@@ -103,7 +110,7 @@
 /**
  * @typedef {Object} FuturesKlines
  * @property {String} symbol
- * @property {String} interval
+ * @property {EnumIntervals} interval
  * @property {Number} [startTime]
  * @property {Number} [endTime]
  * @property {Number} [limit]
@@ -113,8 +120,8 @@
 /**
  * @typedef {Object} FuturesContinuousKlines
  * @property {String} pair
- * @property {String} contractType
- * @property {String} interval
+ * @property {EnumContractType} contractType
+ * @property {EnumIntervals} interval
  * @property {Number} [startTime]
  * @property {Number} [endTime]
  * @property {Number} [limit]
@@ -124,7 +131,7 @@
 /**
  * @typedef {Object} FuturesIndexPriceKlines
  * @property {String} pair
- * @property {String} interval
+ * @property {EnumIntervals} interval
  * @property {Number} [startTime]
  * @property {Number} [endTime]
  * @property {Number} [limit]
@@ -134,7 +141,7 @@
 /**
  * @typedef {Object} FuturesMarkPriceKlines
  * @property {String} symbol
- * @property {String} interval
+ * @property {EnumIntervals} interval
  * @property {Number} [startTime]
  * @property {Number} [endTime]
  * @property {Number} [limit]
@@ -183,7 +190,7 @@
 /**
  * @typedef {Object} FuturesDataOpenInterestHist
  * @property {String} symbol
- * @property {String} period
+ * @property {EnumIntervals} period
  * @property {Number} [limit]
  * @property {Number} [startTime]
  * @property {Number} [endTime]
@@ -193,7 +200,7 @@
 /**
  * @typedef {Object} FuturesDataTopLongShortAccountRatio
  * @property {String} symbol
- * @property {String} period
+ * @property {EnumIntervals} period
  * @property {Number} [limit]
  * @property {Number} [startTime]
  * @property {Number} [endTime]
@@ -203,7 +210,7 @@
 /**
  * @typedef {Object} FuturesDataTopLongShortPositionRatio
  * @property {String} symbol
- * @property {String} period
+ * @property {EnumIntervals} period
  * @property {Number} [limit]
  * @property {Number} [startTime]
  * @property {Number} [endTime]
@@ -213,7 +220,7 @@
 /**
  * @typedef {Object} FuturesDataGlobalLongShortAccountRatio
  * @property {String} symbol
- * @property {String} period
+ * @property {EnumIntervals} period
  * @property {Number} [limit]
  * @property {Number} [startTime]
  * @property {Number} [endTime]
@@ -223,7 +230,7 @@
 /**
  * @typedef {Object} FuturesDataTakerLongShortRatio
  * @property {String} symbol
- * @property {String} period
+ * @property {EnumIntervals} period
  * @property {Number} [limit]
  * @property {Number} [startTime]
  * @property {Number} [endTime]
@@ -233,7 +240,7 @@
 /**
  * @typedef {Object} FuturesLvtKlines
  * @property {String} symbol
- * @property {String} interval
+ * @property {EnumIntervals} interval
  * @property {Number} [startTime]
  * @property {Number} [endTime]
  * @property {Number} [limit]
@@ -310,10 +317,10 @@
 /**
  * @typedef {Object} FuturesPostOrder
  * @property {String} symbol
- * @property {String} side
- * @property {String} positionSide
- * @property {String} type
- * @property {String} timeInForce
+ * @property {EnumOrderSide} side
+ * @property {EnumPositionSide} positionSide
+ * @property {EnumOrderTypes} type
+ * @property {EnumTimeInForce} timeInForce
  * @property {Number} quantity
  * @property {String} reduceOnly
  * @property {Number} price
@@ -322,9 +329,9 @@
  * @property {String} closePosition
  * @property {Number} activationPrice
  * @property {Number} callbackRate
- * @property {String} workingType
+ * @property {EnumWorkingType} workingType
  * @property {String} priceProtect
- * @property {String} newOrderRespType
+ * @property {EnumNewOrderRespType} newOrderRespType
  * @property {Number} [recvWindow]
  */
 
@@ -415,14 +422,14 @@
 /**
  * @typedef {Object} FuturesPostMarginType
  * @property {String} symbol
- * @property {"ISOLATED" | "CROSSED"} marginType ISOLATED | CROSSED
+ * @property {EnumMarginType} marginType
  * @property {Number} [recvWindow]
  */
 
 /**
  * @typedef {Object} FuturesPostPositionMargin
  * @property {String} symbol
- * @property {String} [positionSide]
+ * @property {EnumPositionSide} [positionSide]
  * @property {Number} [amount]
  * @property {Number} [type]
  * @property {Number} [recvWindow]
@@ -479,7 +486,7 @@
 /**
  * @typedef {Object} FuturesGetForceOrders
  * @property {String} [symbol]
- * @property {String} [autoCloseType]
+ * @property {EnumAutoCloseType} [autoCloseType]
  * @property {Number} [startTime]
  * @property {Number} [endTime]
  * @property {Number} [limit]
