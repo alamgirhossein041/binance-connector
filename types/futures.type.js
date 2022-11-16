@@ -201,14 +201,8 @@
  
 // # Private
 /**
- * @typedef {Object} FuturesListenKey
- * @property {"POST" | "DELETE"} method
- * @property {Number} [recvWindow]
- */
-
-/**
  * POST: /sapi/v1/futures/transfer
- * @typedef {Object} FuturesSetFuturesTransfer
+ * @typedef {Object} FuturesPostFuturesTransfer
  * @property {String} asset
  * @property {Number} amount
  * @property {Number} type
@@ -227,7 +221,7 @@
  */
 
 /**
- * @typedef {Object} FuturesSetPositionSideDual
+ * @typedef {Object} FuturesPostPositionSideDual
  * @property {String} dualSidePosition
  * @property {Number} [recvWindow]
  */
@@ -238,7 +232,7 @@
  */
 
 /**
- * @typedef {Object} FuturesSetMultiAssetsMargin
+ * @typedef {Object} FuturesPostMultiAssetsMargin
  * @property {String} multiAssetsMargin
  * @property {Number} [recvWindow]
  */
@@ -249,7 +243,7 @@
  */
 
 /**
- * @typedef {Object} FuturesSetOrder
+ * @typedef {Object} FuturesPostOrder
  * @property {String} symbol
  * @property {String} side
  * @property {String} positionSide
@@ -270,15 +264,190 @@
  */
 
 /**
- * @typedef { Object } FuturesChangeMarginType
- * @property { String } symbol BTCUSDT, ETCUSDT
- * @property {"ISOLATED" | "CROSSED"} marginType ISOLATED | CROSSED
- * @property { Number } [recvWindow]
+ * @typedef {Object} FuturesPostBatchOrders
+ * @property {Array<FuturesPostOrder>} batchOrders
+ * @property {Number} [recvWindow]
  */
 
 /**
- * @typedef {Object} FuturesChangeLeverage
+ * @typedef {Object} FuturesGetOrder
+ * @property {String} symbol
+ * @property {Number} orderId
+ * @property {String} origClientOrderId
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesDeleteOrder
+ * @property {String} symbol
+ * @property {Number} orderId
+ * @property {String} origClientOrderId
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesDeleteAllOpenOrders
+ * @property {String} symbol
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesDeleteBatchOrders
+ * @property {String} symbol
+ * @property {Array<Number>} [orderIdList]
+ * @property {Array<String>} [origClientOrderIdList]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesPostCountDownCancelAll
+ * @property {String} symbol
+ * @property {Number} countdownTime
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetOpenOrder
+ * @property {String} symbol
+ * @property {Number} [orderId]
+ * @property {String} [origClientOrderId]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetOpenOrders
+ * @property {String} [symbol]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetAllOrders
+ * @property {String} symbol
+ * @property {Number} [orderId]
+ * @property {Number} [startTime]
+ * @property {Number} [endTime]
+ * @property {Number} [limit]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetBalance
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetAccount
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesPostLeverage
  * @property {String} symbol
  * @property {Number} leverage
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesPostMarginType
+ * @property {String} symbol
+ * @property {"ISOLATED" | "CROSSED"} marginType ISOLATED | CROSSED
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesPostPositionMargin
+ * @property {String} symbol
+ * @property {String} [positionSide]
+ * @property {Number} [amount]
+ * @property {Number} [type]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetPositionMarginHistory
+ * @property {String} symbol
+ * @property {String} [type]
+ * @property {Number} [startTime]
+ * @property {Number} [endTime]
+ * @property {Number} [limit]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetPositionRisk
+ * @property {String} [symbol]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetUserTrades
+ * @property {String} symbol
+ * @property {Number} [startTime]
+ * @property {Number} [endTime]
+ * @property {Number} [fromId]
+ * @property {Number} [limit]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetIncome
+ * @property {String} symbol
+ * @property {String} incomeType
+ * @property {Number} [startTime]
+ * @property {Number} [endTime]
+ * @property {Number} [limit]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetLeverageBracket
+ * @property {String} [symbol]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetADLQuantile
+ * @property {String} [symbol]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetForceOrders
+ * @property {String} [symbol]
+ * @property {String} [autoCloseType]
+ * @property {Number} [startTime]
+ * @property {Number} [endTime]
+ * @property {Number} [limit]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetApiTradingStatus
+ * @property {String} [symbol]
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetCommissionRate
+ * @property {String} symbol
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetIncomeAsyn
+ * @property {Number} startTime
+ * @property {Number} endTime
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesGetIncomeAsynId
+ * @property {String} downloadId
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesListenKey
+ * @property {"POST" | "DELETE"} method
  * @property {Number} [recvWindow]
  */
