@@ -22,6 +22,10 @@ export class Futures extends Websocket {
      * @param {Number} [options.recvWindow]
      * @param {Boolean} [options.isTestNet]
      */
+
+    /**
+     * @param {Constructor} options
+     */
     constructor(options = {}) {
         super({
             ...options,
@@ -29,7 +33,6 @@ export class Futures extends Websocket {
             wsBaseURL: "wss://fstream.binance.com",
             wsBaseURLTest: "wss://stream.binancefuture.com",
         })
-
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
         this.recvWindow = options.recvWindow
@@ -41,12 +44,7 @@ export class Futures extends Websocket {
     }
 
     /**
-     * 
-     * @param {"GET" | "POST" | "PUT" | "DELETE"} method 
-     * @param {String} address https://fapi.binance.com/fapi/v1/ping
-     * @param {Object} params 
-     * @param {Boolean} isPrivate 
-     * @returns 
+     * @type {Req}
      */
     async request(method, address, params={}, isPrivate=false) {
 
@@ -132,29 +130,21 @@ export class Futures extends Websocket {
     }
 
     /**
-     * 
-     * @param {"GET" | "POST" | "PUT" | "DELETE"} method 
-     * @param {String} address Example: /fapi/v1/exchangeInfo
-     * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
+     * @type {PublicRequest}
      */
     async publicRequest(method, address, params={}) {
         return this.request(method, address, params, false)
     }
 
     /**
-     * 
-     * @param {"GET" | "POST" | "PUT" | "DELETE"} method Example: GET
-     * @param {String} address Example: /fapi/v1/listenKey
-     * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
+     * @type {PrivateRequest}
      */
     async privateRequest(method, address, params={}) {
         return this.request(method, address, params, true)
     }
 
     /**
-     * @param { Object } params
-     * @param { "POST" | "DELETE" } params.method
-     * @param { Number } [params.recvWindow]
+     * @param { ListenKey } params
      */
     async listenKey(params) {
         if (!params.method) {
@@ -164,49 +154,35 @@ export class Futures extends Websocket {
     }
 
     /**
-     * 
-     * @param { Object } params 
-     * @param { String } params.symbol
-     * @param { Number } params.limit
-     * @param { Number } [params.recvWindow]
+     * @param { Trades } params 
      */
     async trades(params) {
         return await this.publicRequest("GET", "/fapi/v1/trades", params)
     }
 
     /**
-     * @param { Object } params
-     * @param { Number } [params.recvWindow]
-     * @returns {Promise<Object>}
+     * @param { AccountInfo } params
      */
     async accountInfo(params) {
         return await this.privateRequest("GET", "/fapi/v2/account", params)
     }
 
     /**
-     * @param { Object } params
-     * @param { Number } [params.recvWindow]
+     * @param { ExchangeInfo } params
      */
     async exchangeInfo(params) {
         return await this.publicRequest("GET", "/fapi/exchangeInfo", params)
     }
 
     /**
-     * @param { Object } params 
-     * @param { String } params.symbol BTCUSDT, ETCUSDT
-     * @param {"ISOLATED" | "CROSSED"} params.marginType ISOLATED | CROSSED
-     * @param { Number } [params.recvWindow]
-     * @returns { Promise<JSON> }
+     * @param { ChangeMarginType } params 
      */
     async changeMarginType(params) {
         return await this.privateRequest("POST", "/fapi/v1/marginType", params)
     }
 
     /**
-     * @param {Object} params 
-     * @param {String} params.symbol
-     * @param {Number} params.leverage
-     * @param {Number} [params.recvWindow]
+     * @param {ChangeLeverage} params 
      */
     async changeLeverage(params) {
         return await this.privateRequest("POST", "/fapi/v1/leverage", params)
