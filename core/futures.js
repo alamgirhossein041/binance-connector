@@ -29,6 +29,7 @@ export class Futures extends Websocket {
 
         super(OPTIONS)
 
+        // Coming from constructor
         this.api_key    = options.api_key
         this.api_secret = options.api_secret
         this.recvWindow = options.recvWindow
