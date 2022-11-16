@@ -44,6 +44,7 @@ export class Futures {
         this.http = new Http(OPTIONS)
     }
 
+    // ### Public
     /**
      * @param {FuturesJustRecvWindow} params
      */
@@ -94,18 +95,210 @@ export class Futures {
     }
 
     /**
+     * @param {FuturesKlines} params 
+     */
+    async klines(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/klines", params)
+    }
+
+    /**
+     * @param {FuturesContinuousKlines} params 
+     */
+    async continuousKlines(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/continuousKlines", params)
+    }
+
+    /**
+     * @param {FuturesIndexPriceKlines} params 
+     */
+    async indexPriceKlines(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/indexPriceKlines", params)
+    }
+
+    /**
+     * @param {FuturesMarkPriceKlines} params 
+     */
+    async markPriceKlines(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/markPriceKlines", params)
+    }
+
+    /**
+     * @param {FuturesPremiumIndex} params 
+     */
+    async premiumIndex(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/premiumIndex", params)
+    }
+
+    /**
+     * @param {FuturesFundingRate} params 
+     */
+    async fundingRate(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/fundingRate", params)
+    }
+
+    /**
+     * @param {Futures24hr} params 
+     */
+    async ticker24hr(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/ticker/24hr", params)
+    }
+
+    /**
+     * @param {FuturesTickerPrice} params 
+     */
+    async tickerPrice(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/ticker/price", params)
+    }
+
+    /**
+     * @param {FuturesTickerBookTicker} params 
+     */
+    async tickerBookTicker(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/ticker/bookTicker", params)
+    }
+
+    /**
+     * @param {FuturesOpenInterest} params 
+     */
+    async openInterest(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/openInterest", params)
+    }
+
+    /**
+     * @param {FuturesDataOpenInterestHist} params 
+     */
+    async dataOpenInterestHist(params) {
+        return await this.http.publicRequest("GET", "/futures/data/openInterestHist", params)
+    }
+
+    /**
+     * @param {DataTopLongShortAccountRatio} params 
+     */
+    async DataTopLongShortAccountRatio(params) {
+        return await this.http.publicRequest("GET", "/futures/data/topLongShortAccountRatio", params)
+    }
+
+    /**
+     * @param {FuturesDataTopLongShortPositionRatio} params 
+     */
+    async dataTopLongShortPositionRatio(params) {
+        return await this.http.publicRequest("GET", "/futures/data/topLongShortPositionRatio", params)
+    }
+
+    /**
+     * @param {FuturesDataGlobalLongShortAccountRatio} params 
+     */
+    async dataGlobalLongShortAccountRatio(params) {
+        return await this.http.publicRequest("GET", "/futures/data/globalLongShortAccountRatio", params)
+    }
+
+    /**
+     * @param {FuturesDataTakerLongShortRatio} params 
+     */
+    async dataTakerLongShortRatio(params) {
+        return await this.http.publicRequest("GET", "/futures/data/takerlongshortRatio", params)
+    }
+
+    /**
+     * @param {FuturesLvtKlines} params 
+     */
+    async lvtKlines(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/lvtKlines", params)
+    }
+
+    /**
+     * @param {FuturesIndexInfo} params 
+     */
+    async indexInfo(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/indexInfo", params)
+    }
+
+    /**
+     * @param {FuturesAssetIndex} params 
+     */
+    async assetIndex(params) {
+        return await this.http.publicRequest("GET", "/fapi/v1/assetIndex", params)
+    }
+
+    // ### Private
+
+    /**
      * @param {} params 
      */
     async f(params) {
-        return await this.http.publicRequest("GET", "", params)
+        return await this.http.privateRequest("", "", params)
     }
 
     /**
      * @param {} params 
      */
     async f(params) {
-        return await this.http.publicRequest("GET", "", params)
+        return await this.http.privateRequest("", "", params)
     }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
+    /**
+     * @param {} params 
+     */
+    async f(params) {
+        return await this.http.privateRequest("", "", params)
+    }
+
 
 
 
