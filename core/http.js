@@ -1,5 +1,4 @@
 import CryptoJS from "crypto-js"
-import { HttpErrors } from "./http_errors.js"
 import("../types/http.types.js")
 
 export class Http {
