@@ -46,21 +46,21 @@ export class Futures {
 
     // ### Public
     /**
-     * @param {FuturesJustRecvWindow} params
+     * @param {FuturesJustRecvWindow} [params]
      */
     async ping(params) {
         return await this.http.publicRequest("GET", "/fapi/v1/ping", params)
     }
 
     /**
-     * @param {FuturesJustRecvWindow} params
+     * @param {FuturesJustRecvWindow} [params]
      */
     async time(params) {
         return await this.http.publicRequest("GET", "/fapi/v1/time", params)
     }
 
     /**
-     * @param { FuturesJustRecvWindow } params
+     * @param { FuturesJustRecvWindow } [params]
      */
      async exchangeInfo(params) {
         return await this.http.publicRequest("GET", "/fapi/exchangeInfo", params)
@@ -88,7 +88,7 @@ export class Futures {
     }
 
     /**
-     * @param {} params 
+     * @param {FuturesAggTrades} params 
      */
     async aggTrades(params) {
         return await this.http.publicRequest("GET", "/fapi/v1/aggTrades", params)
@@ -172,9 +172,9 @@ export class Futures {
     }
 
     /**
-     * @param {DataTopLongShortAccountRatio} params 
+     * @param {FuturesDataTopLongShortAccountRatio} params 
      */
-    async DataTopLongShortAccountRatio(params) {
+    async dataTopLongShortAccountRatio(params) {
         return await this.http.publicRequest("GET", "/futures/data/topLongShortAccountRatio", params)
     }
 
@@ -243,7 +243,7 @@ export class Futures {
     }
 
     /**
-     * @param {FuturesGetPositionSideDual} params 
+     * @param {FuturesGetPositionSideDual} [params] 
      */
     async positionSideDual(params) {
         return await this.http.privateRequest("GET", "/fapi/v1/positionSide/dual", params)
@@ -257,7 +257,7 @@ export class Futures {
     }
 
     /**
-     * @param {FuturesGetMultiAssetsMargin} params 
+     * @param {FuturesGetMultiAssetsMargin} [params] 
      */
     async multiAssetsMargin(params) {
         return await this.http.privateRequest("GET", "/fapi/v1/multiAssetsMargin", params)
@@ -334,7 +334,7 @@ export class Futures {
     }
     
     /**
-     * @param {FuturesGetBalance} params 
+     * @param {FuturesGetBalance} [params] 
      */
      async balance(params) {
         return await this.http.privateRequest("GET", "/fapi/v2/balance", params)
@@ -348,14 +348,14 @@ export class Futures {
     }
     
     /**
-     * @param {FuturesChangeLeverage} params 
+     * @param {FuturesPostLeverage} params 
      */
      async changeLeverage(params) {
         return await this.http.privateRequest("POST", "/fapi/v1/leverage", params)
     }
 
     /**
-     * @param { FuturesChangeMarginType } params 
+     * @param { FuturesPostMarginType } params 
      */
      async changeMarginType(params) {
         return await this.http.privateRequest("POST", "/fapi/v1/marginType", params)
@@ -446,34 +446,36 @@ export class Futures {
     }
     
     /**
-     * @param { FuturesPostListenKey } params
+     * @param { FuturesPostListenKey } [params]
      */
     async newListenKey(params) {
         return await this.http.privateRequest("POST", "/fapi/v1/listenKey", params)
     }
 
     /**
-     * @param { FuturesPutListenKey } params
+     * @param { FuturesPutListenKey } [params]
      */
     async keepAliveListenKey(params) {
         return await this.http.privateRequest("PUT", "/fapi/v1/listenKey", params)
     }
 
     /**
-     * @param { FuturesDeleteListenKey } params
+     * @param { FuturesDeleteListenKey } [params]
      */
     async deleteListenKey(params) {
         return await this.http.privateRequest("DELETE", "/fapi/v1/listenKey", params)
     }
 }
 
-
 async function Boot() {
     let f = new Futures({
+        api_key: config.API_KEY_TEST,
+        api_secret: config.API_SECRET_TEST,
+        isTestNet: true,
     })
 
-    await f.account()
-    // await f.http.privateRequest("GET", "/fapi/v1/test")
+    // await f.account()
+    await f.http.privateRequest("GET", "/fapi/v1/test")
 }
 
 async function _Boot() {
