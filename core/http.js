@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js"
+import { HttpErrors } from "./http_errors.js"
 import("../types/http.types.js")
 
 export class Http {
@@ -64,7 +65,7 @@ export class Http {
                 Accept: "application/x-www-form-urlencoded",
             }
 
-            if (isPrivate) {
+            if (isPrivate && this.api_secret) {
                 const signature = this.HmacSHA256(
                     queryString,
                     this.api_secret
@@ -84,24 +85,20 @@ export class Http {
                 headers,
             })
 
-            let res
-            if (data.status == 200) {
-                res = await data.json()
+            if (data.status == 404) {
+                throw new Error("404 not found")
             }
 
-            console.log(res)
+            let body = await data.json()
+            console.log(body)
+            return body
 
-            return res
         } catch (error) {
+            
             let errorMessage = {
-                type: "error",
                 name: error.name,
                 message: error.message,
-            }
-
-            if (error instanceof TypeError) {
-            }
-            if (error instanceof SyntaxError) {
+                stack: error.stack,
             }
 
             console.log(errorMessage)

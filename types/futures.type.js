@@ -519,7 +519,16 @@
  */
 
 /**
- * @typedef {Object} FuturesListenKey
- * @property {"POST" | "DELETE"} method
+ * @typedef {Object} FuturesPostListenKey
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesPutListenKey
+ * @property {Number} [recvWindow]
+ */
+
+/**
+ * @typedef {Object} FuturesDeleteListenKey
  * @property {Number} [recvWindow]
  */
