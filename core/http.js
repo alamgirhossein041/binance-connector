@@ -18,120 +18,6 @@ export class Http {
         this.timestamp = options.timestamp
     }
 
-
-    /**
-     * @type {HttpRequest}
-     */
-    async DEP_request(method, address, params = {}, isPrivate = false) {
-        try {
-
-            if (this.isTestNet) {
-                console.log("## Test Net Futures ##")
-                address = this.baseURLTest + address
-            } else {
-                address = this.baseURL + address
-            }
-            
-            let recvWindow = this.recvWindow
-            if (params.recvWindow) {
-                recvWindow = params.recvWindow
-                delete params.recvWindow
-            }
-
-            const queries = {
-                ...params,
-                timestamp: this.timestamp,
-                recvWindow,
-            }
-
-            let queryString = Object.keys(queries)
-                .map((key) => {
-                    let value = queries[key]
-
-                    if (value instanceof Array) {
-                        value = JSON.stringify(value)
-                        value = encodeURI(value)
-                    }
-                    return `${key}=${value}`
-                })
-                .join("&")
-            
-            let headers = {
-                Accept: "application/x-www-form-urlencoded",
-            }
-
-            let queryParam = ""
-            let signature  = ""
-            if (isPrivate && this.api_secret) {
-                signature = this.HmacSHA256(
-                    queryString,
-                    this.api_secret
-                ).toString()
-
-                queryParam = queryString + "&signature=" + signature
-            } else {
-                queryParam = address + "?" + queryString
-            }
-
-            if (this.api_key) {
-                headers["X-MBX-APIKEY"] = this.api_key
-            }
-
-            // console.log(address + "?" + queryParam)
-            // console.log(signature)
-            // console.log(queries)
-            // console.log(params)
-            // console.log(queries)
-            // console.log({
-            //     ...queries,
-            //     signature,
-            // })
-
-            // console.log(queryParam)
-            // return false
-
-            let data = await fetch(address + "?" + queryParam, {
-                method,
-                headers,
-            })
-            let res = await data.json()
-            console.log(res)
-
-            // let data
-            // if (method == "POST") {
-            //     data = await fetch(address, {
-            //         method,
-            //         headers,
-            //         body: queryParam,
-            //     })
-            //     console.log(await data.json())
-            // }
-            // let data = await fetch(address, {
-            //     method,
-            //     headers,
-            // })
-
-            // if (data.status == 404) {
-            //     throw new Error("404 not found")
-            // }
-
-            // let body = await data.json()
-            // console.log(body)
-            // return body
-
-        } catch (error) {
-            let errorMessage = {
-                name: error.name,
-                message: error.message,
-                stack: error.stack,
-            }
-
-            console.log(errorMessage)
-            return errorMessage
-        }
-    }
-
-
     /**
      * @type {HttpRequest}
      */
@@ -213,16 +99,72 @@ export class Http {
     }
 
     /**
+     * @type {HttpPublic}
+     */
+    async publicGET(address, params = {}) {
+        return await this.request("GET", address, params, false)
+    }
+
+    /**
+     * @type {HttpPublic}
+     */
+    async publicPOST(address, params = {}) {
+        return await this.request("POST", address, params, false)
+    }
+
+    /**
+     * @type {HttpPublic}
+     */
+    async publicPUT(address, params = {}) {
+        return await this.request("PUT", address, params, false)
+    }
+
+    /**
+     * @type {HttpPublic}
+     */
+    async publicDELETE(address, params = {}) {
+        return await this.request("DELETE", address, params, false)
+    }
+
+    /**
+     * @type {HttpPrivate}
+     */
+    async privateGET(address, params={}) {
+        return await this.request("GET", address, params, true)
+    }
+
+    /**
+     * @type {HttpPrivate}
+     */
+    async privatePOST(address, params={}) {
+        return await this.request("POST", address, params, true)
+    }
+
+    /**
+     * @type {HttpPrivate}
+     */
+    async privatePUT(address, params={}) {
+        return await this.request("PUT", address, params, true)
+    }
+
+    /**
+     * @type {HttpPrivate}
+     */
+    async privateDELETE(address, params={}) {
+        return await this.request("DELETE", address, params, true)
+    }
+
+    /**
      * @type {HttpPublicRequest}
      */
     async publicRequest(method, address, params = {}) {
-        return this.request(method, address, params, false)
+        return await this.request(method, address, params, false)
     }
 
     /**
      * @type {HttpPrivateRequest}
      */
     async privateRequest(method, address, params = {}) {
-        return this.request(method, address, params, true)
+        return await this.request(method, address, params, true)
     }
 }

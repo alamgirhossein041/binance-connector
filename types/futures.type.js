@@ -28,7 +28,7 @@
 /**
  * @typedef {"LIMIT" | "MARKET" | "STOP" | "STOP_MARKET" | "TAKE_PROFIT" | "TAKE_PROFIT_MARKET" | "TRAILING_STOP_MARKET"} EnumOrderTypes
  */
- 
+
 /**
  * @typedef {"BUY" | "SELL"} EnumOrderSide
  */
@@ -333,7 +333,7 @@
  * @property {String} [priceProtect]
  * @property {EnumNewOrderRespType} [newOrderRespType]
  * @property {Number} [recvWindow]
- * 
+ *
  * @return {{id: "test"}}
  */
 

@@ -39,3 +39,18 @@
  * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
  * @returns {Promise}
  */
+
+/**
+ * @callback HttpPublic
+ * @param {String} address Example: /fapi/v1/exchangeInfo
+ * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
+ * @returns {Promise}
+ */
+
+/**
+ * @callback HttpPrivate
+ * @param {String} address Example: /fapi/v1/listenKey
+ * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
+ * @returns {Promise}
+ */
+
