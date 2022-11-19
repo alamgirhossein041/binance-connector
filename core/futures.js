@@ -21,7 +21,7 @@ export class Futures {
      */
     constructor(options = {}) {
 
-        const OPTIONS = {
+        let OPTIONS = {
             ...options,
             ...this.ApiMap,
             timestamp: this.timestamp,
@@ -36,12 +36,17 @@ export class Futures {
         // Default values
         this.recvWindow = this.recvWindow ?? 5000
         this.isTestNet  = this.isTestNet  ?? false
+        
+        if (!OPTIONS.recvWindow) {
+            OPTIONS.recvWindow = this.recvWindow
+        }
 
         // Websocket
         this.ws = new Websocket(OPTIONS)
-
+        
         // Utils
         this.http = new Http(OPTIONS)
+        
     }
 
     // ### Public
@@ -271,7 +276,7 @@ export class Futures {
     }
 
     /**
-     * @param {FuturesPostBatchOrders} params 
+     * @param {FuturesPostBatchOrders} params
      */
     async newBatchOrders(params) {
         return await this.http.privateRequest("POST", "/fapi/v1/batchOrders", params)
@@ -467,21 +472,50 @@ export class Futures {
     }
 }
 
+
+/**
+ * @TODO 1- returns
+ * @TODO 2- fix newBatchOrders
+ */
+
 async function Boot() {
     let f = new Futures({
-        api_key: config.API_KEY_TEST,
-        api_secret: config.API_SECRET_TEST,
+        api_key: config.TEST_API_KEY,
+        api_secret: config.TEST_API_SECRET,
         isTestNet: true,
+        recvWindow: 20000,
     })
 
-    // await f.account()
-    await f.http.privateRequest("GET", "/fapi/v1/test")
+    // let d = await f.newOrder({
+    //     side: "BUY",
+    //     symbol: "BTCUSDT",
+    //     type: "MARKET",
+    //     quantity: 0.001,
+    // })
+
+    let d = await f.newBatchOrders({
+        batchOrders: [
+            {
+                side: "BUY",
+                symbol: "BTCUSDT",
+                type: "MARKET",
+                quantity: "0.001",
+            },
+            {
+                side: "SELL",
+                symbol: "BNBUSDT",
+                type: "MARKET",
+                quantity: "0.1"
+            }
+        ]
+    })
+
 }
 
 async function _Boot() {
     let f = new Futures({
-        api_key: config.API_KEY_TEST,
-        api_secret: config.API_SECRET_TEST,
+        api_key: config.TEST_API_KEY,
+        api_secret: config.TEST_API_SECRET,
         isTestNet: true,
         recvWindow: 20000,
     })

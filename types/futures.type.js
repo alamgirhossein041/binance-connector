@@ -318,21 +318,23 @@
  * @typedef {Object} FuturesPostOrder
  * @property {String} symbol
  * @property {EnumOrderSide} side
- * @property {EnumPositionSide} positionSide
+ * @property {EnumPositionSide} [positionSide]
  * @property {EnumOrderTypes} type
- * @property {EnumTimeInForce} timeInForce
+ * @property {EnumTimeInForce} [timeInForce]
  * @property {Number} quantity
- * @property {String} reduceOnly
- * @property {Number} price
- * @property {String} newClientOrderId
- * @property {Number} stopPrice
- * @property {String} closePosition
- * @property {Number} activationPrice
- * @property {Number} callbackRate
- * @property {EnumWorkingType} workingType
- * @property {String} priceProtect
- * @property {EnumNewOrderRespType} newOrderRespType
+ * @property {String} [reduceOnly]
+ * @property {Number} [price]
+ * @property {String} [newClientOrderId]
+ * @property {Number} [stopPrice]
+ * @property {String} [closePosition]
+ * @property {Number} [activationPrice]
+ * @property {Number} [callbackRate]
+ * @property {EnumWorkingType} [workingType]
+ * @property {String} [priceProtect]
+ * @property {EnumNewOrderRespType} [newOrderRespType]
  * @property {Number} [recvWindow]
+ * 
+ * @return {{id: "test"}}
  */
 
 /**

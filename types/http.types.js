@@ -29,7 +29,7 @@
  * @param {"GET" | "POST" | "PUT" | "DELETE"} method
  * @param {String} address Example: /fapi/v1/exchangeInfo
  * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
- * @return {Promise}
+ * @returns {Promise}
  */
 
 /**
@@ -37,5 +37,5 @@
  * @param {"GET" | "POST" | "PUT" | "DELETE"} method Example: GET
  * @param {String} address Example: /fapi/v1/listenKey
  * @param {Object} params Example: {symbol: "BTCUSDT", limit: 10}
- * @return {Promise}
+ * @returns {Promise}
  */
