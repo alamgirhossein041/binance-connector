@@ -1,6 +1,8 @@
 ### Requirement
 `node 18.0.0` and higher    
-otherwise you need to polyfill `fetch` with `globalThis`
+otherwise you need to polyfill `fetch` with `globalThis`    
+also you need to enable node ES6 `module`    
+package.json -> `"type": "module"`
 
 ### Installation
 `npm install binance-connector`
