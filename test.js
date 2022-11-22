@@ -6,6 +6,29 @@ let myFuture = new Futures({
     isTestNet: true,
 })
 
+
+
+
+
+myFuture.newOrder({
+    
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 1- get the listenKey
 let listenKey
 myFuture.newListenKey().then(d => d = listenKey)
