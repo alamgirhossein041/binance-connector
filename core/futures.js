@@ -66,7 +66,7 @@ export class Futures {
      * @param { FuturesJustRecvWindow } [params]
      */
      async exchangeInfo(params) {
-        return await this.http.publicGET("/fapi/exchangeInfo", params)
+        return await this.http.publicGET("/fapi/v1/exchangeInfo", params)
     }
 
     /**
