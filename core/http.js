@@ -85,7 +85,7 @@ export class Http {
             }
 
             let body = await data.json()
-            console.log(body)
+            // console.log(body)
             return body
 
         } catch (error) {

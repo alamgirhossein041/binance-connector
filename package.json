@@ -1,5 +1,5 @@
 {
-  "name": "v1",
+  "name": "binance-connector",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "crypto-js": "^4.1.1",
     "ws": "^8.11.0"
