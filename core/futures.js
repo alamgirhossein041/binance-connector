@@ -2,8 +2,6 @@ import { Websocket } from "./websocket.js"
 import { Http } from "./http.js"
 import("../types/futures.type.js")
 
-import { config } from "../config.js"
-
 export class Futures {
     
     ApiMap = {
@@ -471,95 +469,3 @@ export class Futures {
         return await this.http.privateDELETE("/fapi/v1/listenKey", params)
     }
 }
-
-async function Boot() {
-    let f = new Futures({
-        api_key: config.TEST_API_KEY,
-        api_secret: config.TEST_API_SECRET,
-        isTestNet: true,
-        recvWindow: 20000,
-    })
-
-    // let d = await f.newOrder({
-    //     side: "BUY",
-    //     symbol: "BTCUSDT",
-    //     type: "MARKET",
-    //     quantity: 0.001,
-    // })
-
-    let d = await f.newBatchOrders({
-        batchOrders: [
-            {
-                side: "BUY",
-                symbol: "BTCUSDT",
-                type: "MARKET",
-                quantity: "0.001",
-            },
-            {
-                side: "SELL",
-                symbol: "BNBUSDT",
-                type: "MARKET",
-                quantity: "0.1"
-            }
-        ]
-    })
-
-}
-
-async function _Boot() {
-    let f = new Futures({
-        api_key: config.TEST_API_KEY,
-        api_secret: config.TEST_API_SECRET,
-        isTestNet: true,
-        recvWindow: 20000,
-    })
-
-    let data = await f.listenKey({method: "POST"})
-    let listenKey = data.listenKey
-
-    f.ws.userStream(listenKey, "USER_DATA")
-
-    f.ws.addListener("USER_DATA", (socket) => {
-        socket.addEventListener("message", (event) => {
-
-            let data = event.data
-            console.log(data)
-        })
-    })
-    
-    new Promise((resolve, reject) => {
-        setTimeout(() => {
-            f.changeMarginType({
-                marginType: "ISOLATED",
-                symbol: "BNBUSDT",
-            })
-
-            f.changeLeverage({
-                leverage: 20,
-                symbol: "BTCUSDT",
-            })
-        }, (5000))
-    })
-}
-Boot()
-
-// f.listenKey("POST")
-// f.exchangeInfo()
-
-// f.changeMarginType("BTCUSDT", "CROSSED")
-
-// f.subscribe(["btcusdt@kline_3m"], 1, "BTC")
-
-// f.addListener("BTC", (socket) => {
-    
-//     socket.addEventListener("message", (event) => {
-//         // let data = event.data
-//         // console.log(data)
-//     })
-
-// })
-
-// new Promise((resolve, reject) => {
-//     setTimeout(() => f.unsubscribe(1), 10000)
-//     resolve()
-// })

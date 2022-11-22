@@ -1,3 +1,5 @@
+import { EventEmitter } from "events"
+import https from "https"
 import CryptoJS from "crypto-js"
 import("../types/http.types.js")
 
