@@ -97,7 +97,8 @@ let myFuture = new Futures({
 async function Run() {
 
     // 1- get the listenKey
-    let listenKey = await myFuture.newListenKey()
+    let reqListenKey = await myFuture.newListenKey()
+    let listenKey = reqListenKey.listenKey
 
     // 2- subscribe to User Data Stream
     myFuture.ws.userStream(listenKey, "MyUserData")

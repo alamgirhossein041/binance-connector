@@ -1,31 +1,15 @@
 import { Futures } from "./index.js"
+import { config } from "./config.js"
 
 let myFuture = new Futures({
-    api_key: "MyApiKey",
-    api_secret: "MyApiSecret",
+    api_key: config.TEST_API_KEY,
+    api_secret: config.TEST_API_SECRET,
     isTestNet: true,
 })
 
-myFuture.newOrder({
-    
-})
-
-// 1- get the listenKey
-let listenKey
-myFuture.newListenKey().then(d => d = listenKey)
-console.log(listenKey)
-
-// 2- subscribe to two market data
-// myFuture.ws.userStream("")
-
-// // 3- listen to data coming from binance
-// myFuture.ws.addListener("MyMarketData", (socket) => {
-
-//     socket.addEventListener("message", (event) => {
-//         let data = event.data
-//         data = JSON.parse(data)
-
-//         console.log(data)
-//     })
-
-// })
+async function Run() {
+    let reqListenKey = await myFuture.newListenKey()
+    let listenKey = reqListenKey.listenKey
+    console.log(listenKey)
+}
+Run()
