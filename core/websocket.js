@@ -97,15 +97,15 @@ export class Websocket extends EventEmitter {
         }
 
         ws.on("ping", (data) => {
-            console.log(`${new Date()} - Binance Said: Ping`)
+            // console.log(`${new Date()} - Binance Said: Ping`)
             
             ws.ping()
             ws.pong()
         })
 
-        ws.on("pong", (data) => {
-            console.log("We Said: Pong")
-        })
+        // ws.on("pong", (data) => {
+        //     // console.log("We Said: Pong")
+        // })
 
         ws.on("open", (event) => {
 
