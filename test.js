@@ -8,8 +8,11 @@ let myFuture = new Futures({
 })
 
 async function Run() {
-    let reqListenKey = await myFuture.newListenKey()
-    let listenKey = reqListenKey.listenKey
-    console.log(listenKey)
+    let klines = await myFuture.klines({
+        interval: "1m",
+        symbol: "BTCUSDT",
+        limit: 10
+    })
+    console.log(klines)
 }
 Run()
