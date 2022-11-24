@@ -127,13 +127,13 @@ Run()
 ### Structure
 `binance-connector` contains this components    
 
-| Component     | Info               | Status       | Description                                       |
-| ------------- |-------------       | -------------|                                                   |
-| Futures       | Futures API        | Completed    |                                                   |
-| Spot          | Futures API        | In progress  |                                                   |
-| Spot          | Futures API        | Completed    |                                                   |
-| Websocket     | Abstract Websocket | Completed    | it can connect to any of binance ws endpoints     |
-| Http          | Abstract Http      | Completed    | it can request to any of binance rest endpoints   |
+| Component     | Info               | Status        | Description                                       |
+| ------------- |-------------       | ------------- | -------------                                     |
+| Futures       | Futures API        | Completed     |                                                   |
+| Spot          | Futures API        | In progress   |                                                   |
+| Spot          | Futures API        | Completed     |                                                   |
+| Websocket     | Abstract Websocket | Completed     | it can connect to any of binance ws endpoints     |
+| Http          | Abstract Http      | Completed     | it can request to any of binance rest endpoints   |
 
 
 ### Notes
