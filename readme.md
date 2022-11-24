@@ -127,18 +127,18 @@ Run()
 ### Structure
 `binance-connector` contains this components    
 
-| Component     | Info               | Status        | Description                                       |
-| ------------- |-------------       | ------------- | -------------                                     |
-| Futures       | Futures API        | Completed     |                                                   |
-| Spot          | Spot API           | In progress   |                                                   |
-| Margin        | Spot API           | In progress   |                                                   |
-| Saving        | Spot API           | In progress   |                                                   |
-| Mining        | Spot API           | In progress   |                                                   |
-| Coin-M        | Coin-M API         | In progress   |                                                   |
-| Options       | European API       | In progress   |                                                   |
-| Websocket     | Abstract Websocket | Completed     | it can connect to any of binance ws endpoints     |
-| Http          | Abstract Http      | Completed     | it can request to any of binance rest endpoints   |
+| Component     | Info               | Status        |
+| ------------- |-------------       | ------------- |
+| Futures       | Futures API        | Completed     |
+| Spot          | Spot API           | In progress   |
+| Coin-M        | Coin-M API         | In progress   |
+| Options       | European API       | In progress   |
+| Websocket     | Abstract Websocket | Completed     |
+| Http          | Abstract Http      | Completed     |
 
+**Spot**: contains: `Wallet`, `Sub-Account`, `Market Data`, `Spot`, `Margin`, `Savings`, `Staking`, `Mining`, `Futures`, `Futures Algo`, `Portfolio`, `BLVT`, `BSwap`, `Fiat`, `C2C`, `VIP Loans`, `Crypto Loans`, `Crypto Loans`, `Pay`, `Convert`, `Rebate`, `NFT`, `Binance Code` (all available endpoints in [binance spot doc](https://binance-docs.github.io/apidocs/spot/en/#change-log))
+
+**Websocket & Http**: can connect/request to any of binance ws/rest endpoints
 
 ### Notes
 - ws data are either `Buffer` OR `Raw string`    
