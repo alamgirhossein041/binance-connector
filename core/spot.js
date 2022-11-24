@@ -465,33 +465,51 @@ export class Spot {
     /**
      * @param {} [params]
      */
-    async f(params) {
-        return await this.http.privateGET("", params)
+    async deleteSubAccountSubAccountApiIpRestrictionIpList(params) {
+        return await this.http.privateDELETE("/sapi/v1/sub-account/subAccountApi/ipRestriction/ipList", params)
     }
    
     /**
      * @param {} [params]
      */
-    async f(params) {
-        return await this.http.privateGET("", params)
+    async subAccountApiRestrictionsIpRestrictionThirdPartyList(params) {
+        return await this.http.privateGET("/sapi/v1/sub-account/apiRestrictions/ipRestriction/thirdPartyList", params)
     }
    
     /**
      * @param {} [params]
      */
-    async f(params) {
-        return await this.http.privateGET("", params)
+    async updateSubAccountSubAccountApiIpRestriction(params) {
+        return await this.http.privatePOST("/sapi/v2/sub-account/subAccountApi/ipRestriction", params)
     }
    
     /**
      * @param {} [params]
      */
-    async f(params) {
-        return await this.http.privateGET("", params)
+    async newManagedSubaccountDeposit(params) {
+        return await this.http.privatePOST("/sapi/v1/managed-subaccount/deposit", params)
     }
-    
 
+    /**
+     * @param {} [params]
+     */
+    async managedSubaccountAsset(params) {
+        return await this.http.privateGET("/sapi/v1/managed-subaccount/asset", params)
+    }
 
+    /**
+     * @param {} [params]
+     */
+    async newManagedSubaccountWithdraw(params) {
+        return await this.http.privatePOST("/sapi/v1/managed-subaccount/withdraw", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+    async managedSubaccountAccountSnapshot(params) {
+        return await this.http.privateGET("/sapi/v1/managed-subaccount/accountSnapshot", params)
+    }
     // ########################################### Market Data Endpoints
     // ########### Public
     // ########### Private
