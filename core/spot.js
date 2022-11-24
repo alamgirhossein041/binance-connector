@@ -512,6 +512,103 @@ export class Spot {
     }
     // ########################################### Market Data Endpoints
     // ########### Public
+    /**
+     * @param {} [params]
+     */
+     async ping(params) {
+        return await this.http.publicGET("/api/v3/ping", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async time(params) {
+        return await this.http.publicGET("/api/v3/time", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async exchangeInfo(params) {
+        return await this.http.publicGET("/api/v3/exchangeInfo", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async depth(params) {
+        return await this.http.publicGET("/api/v3/depth", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async trades(params) {
+        return await this.http.publicGET("/api/v3/trades", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async historicalTrades(params) {
+        return await this.http.publicGET("/api/v3/historicalTrades", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async aggTrades(params) {
+        return await this.http.publicGET("/api/v3/aggTrades", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async klines(params) {
+        return await this.http.publicGET("/api/v3/klines", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async uiKlines(params) {
+        return await this.http.publicGET("/api/v3/uiKlines", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async avgPrice(params) {
+        return await this.http.publicGET("/api/v3/avgPrice", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async ticker24hr(params) {
+        return await this.http.publicGET("/api/v3/ticker/24hr", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async tickerPrice(params) {
+        return await this.http.publicGET("/api/v3/ticker/price", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async tickerBookTicker(params) {
+        return await this.http.publicGET("/api/v3/ticker/bookTicker", params)
+    }
+
+    /**
+     * @param {} [params]
+     */
+     async ticker(params) {
+        return await this.http.publicGET("/api/v3/ticker", params)
+    }
     // ########### Private
 
     // ########################################### Spot Account/Trade
