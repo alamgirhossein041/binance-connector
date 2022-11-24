@@ -1,23 +1,40 @@
 import { Websocket } from "./websocket.js"
 import { Http } from "./http.js"
-import("../types/spot.type.js")
+import("../types/spot.types.js")
 
 export class Spot {
     
     ApiMap = {
-        baseURL: "https://fapi.binance.com",
-        baseURLTest: "https://testnet.binancefuture.com",
-        wsAuthURL: "wss://fstream-auth.binance.com",
-        wsBaseURL: "wss://fstream.binance.com",
-        wsBaseURLTest: "wss://stream.binancefuture.com",
+        baseURL: "https://api.binance.com",
+        baseURLTest: "https://testnet.binance.vision",
+        wsBaseURL: "wss://stream.binance.com:443",
+        wsBaseURLTest: "wss://testnet.binance.vision",
     }
 
     timestamp = Date.now()
 
     /**
-     * @param {FuturesConstructor} options
+     * @param {SpotConstructor} options
      */
     constructor(options = {}) {
+
+        switch (options.changeBaseURL) {
+            case 1:
+                this.ApiMap.baseURL = "https://api1.binance.com"
+                break;
+            case 2:
+                this.ApiMap.baseURL = "https://api2.binance.com"
+                break;
+            case 3:
+                this.ApiMap.baseURL = "https://api3.binance.com"
+                break;
+            default:
+                break;
+        }
+
+        if (options.changeWsStream) {
+            this.ApiMap.wsBaseURL = "wss://stream.binance.com:9443"
+        }
 
         let OPTIONS = {
             ...options,
@@ -44,428 +61,21 @@ export class Spot {
         
         // Utils
         this.http = new Http(OPTIONS)
-        
     }
 
     // ########### Public
     /**
-     * @param {FuturesJustRecvWindow} [params]
+     * @param {SpotJustRecvWindow} [params]
      */
-    async ping(params) {
-        return await this.http.publicGET("/fapi/v1/ping", params)
-    }
-
-    /**
-     * @param {FuturesJustRecvWindow} [params]
-     */
-    async time(params) {
-        return await this.http.publicGET("/fapi/v1/time", params)
-    }
-
-    /**
-     * @param { FuturesJustRecvWindow } [params]
-     */
-     async exchangeInfo(params) {
-        return await this.http.publicGET("/fapi/v1/exchangeInfo", params)
-    }
-
-    /**
-     * @param {FuturesDepth} params 
-     */
-    async depth(params) {
-        return await this.http.publicGET("/fapi/v1/depth", params)
-    }
-
-    /**
-     * @param {FuturesTrades} params 
-     */
-     async trades(params) {
-        return await this.http.publicGET("/fapi/v1/trades", params)
-    }
-
-    /**
-     * @param {FuturesHistoricalTrades} params 
-     */
-    async historicalTrades(params) {
-        return await this.http.publicGET("/fapi/v1/historicalTrades", params)
-    }
-
-    /**
-     * @param {FuturesAggTrades} params 
-     */
-    async aggTrades(params) {
-        return await this.http.publicGET("/fapi/v1/aggTrades", params)
-    }
-
-    /**
-     * @param {FuturesKlines} params 
-     */
-    async klines(params) {
-        return await this.http.publicGET("/fapi/v1/klines", params)
-    }
-
-    /**
-     * @param {FuturesContinuousKlines} params 
-     */
-    async continuousKlines(params) {
-        return await this.http.publicGET("/fapi/v1/continuousKlines", params)
-    }
-
-    /**
-     * @param {FuturesIndexPriceKlines} params 
-     */
-    async indexPriceKlines(params) {
-        return await this.http.publicGET("/fapi/v1/indexPriceKlines", params)
-    }
-
-    /**
-     * @param {FuturesMarkPriceKlines} params 
-     */
-    async markPriceKlines(params) {
-        return await this.http.publicGET("/fapi/v1/markPriceKlines", params)
-    }
-
-    /**
-     * @param {FuturesPremiumIndex} params 
-     */
-    async premiumIndex(params) {
-        return await this.http.publicGET("/fapi/v1/premiumIndex", params)
-    }
-
-    /**
-     * @param {FuturesFundingRate} params 
-     */
-    async fundingRate(params) {
-        return await this.http.publicGET("/fapi/v1/fundingRate", params)
-    }
-
-    /**
-     * @param {Futures24hr} params 
-     */
-    async ticker24hr(params) {
-        return await this.http.publicGET("/fapi/v1/ticker/24hr", params)
-    }
-
-    /**
-     * @param {FuturesTickerPrice} params 
-     */
-    async tickerPrice(params) {
-        return await this.http.publicGET("/fapi/v1/ticker/price", params)
-    }
-
-    /**
-     * @param {FuturesTickerBookTicker} params 
-     */
-    async tickerBookTicker(params) {
-        return await this.http.publicGET("/fapi/v1/ticker/bookTicker", params)
-    }
-
-    /**
-     * @param {FuturesOpenInterest} params 
-     */
-    async openInterest(params) {
-        return await this.http.publicGET("/fapi/v1/openInterest", params)
-    }
-
-    /**
-     * @param {FuturesDataOpenInterestHist} params 
-     */
-    async dataOpenInterestHist(params) {
-        return await this.http.publicGET("/futures/data/openInterestHist", params)
-    }
-
-    /**
-     * @param {FuturesDataTopLongShortAccountRatio} params 
-     */
-    async dataTopLongShortAccountRatio(params) {
-        return await this.http.publicGET("/futures/data/topLongShortAccountRatio", params)
-    }
-
-    /**
-     * @param {FuturesDataTopLongShortPositionRatio} params 
-     */
-    async dataTopLongShortPositionRatio(params) {
-        return await this.http.publicGET("/futures/data/topLongShortPositionRatio", params)
-    }
-
-    /**
-     * @param {FuturesDataGlobalLongShortAccountRatio} params 
-     */
-    async dataGlobalLongShortAccountRatio(params) {
-        return await this.http.publicGET("/futures/data/globalLongShortAccountRatio", params)
-    }
-
-    /**
-     * @param {FuturesDataTakerLongShortRatio} params 
-     */
-    async dataTakerLongShortRatio(params) {
-        return await this.http.publicGET("/futures/data/takerlongshortRatio", params)
-    }
-
-    /**
-     * @param {FuturesLvtKlines} params 
-     */
-    async lvtKlines(params) {
-        return await this.http.publicGET("/fapi/v1/lvtKlines", params)
-    }
-
-    /**
-     * @param {FuturesIndexInfo} params 
-     */
-    async indexInfo(params) {
-        return await this.http.publicGET("/fapi/v1/indexInfo", params)
-    }
-
-    /**
-     * @param {FuturesAssetIndex} params 
-     */
-    async assetIndex(params) {
-        return await this.http.publicGET("/fapi/v1/assetIndex", params)
-    }
-
-    /**
-     * @param { FuturesGetPmExchangeInfo } params
-     */
-     async pmExchangeInfo(params) {
-        return await this.http.publicGET("/fapi/v1/pmExchangeInfo", params)
-    }
-
-    /**
-     * @param { FuturesPmAccountInfo } params
-     */
-    async pmAccountInfo(params) {
-        return await this.http.publicGET("/fapi/v1/pmAccountInfo", params)
-    }
-    // ########### Private
-
-    /**
-     * @param {FuturesPostPositionSideDual} params 
-     */
-    async changePositionSideDual(params) {
-        return await this.http.privatePOST("/fapi/v1/positionSide/dual", params)
-    }
-
-    /**
-     * @param {FuturesGetPositionSideDual} [params] 
-     */
-    async positionSideDual(params) {
-        return await this.http.privateGET("/fapi/v1/positionSide/dual", params)
-    }
-
-    /**
-     * @param {FuturesPostMultiAssetsMargin} params 
-     */
-    async changeMultiAssetsMargin(params) {
-        return await this.http.privatePOST("/fapi/v1/multiAssetsMargin", params)
-    }
-
-    /**
-     * @param {FuturesGetMultiAssetsMargin} [params] 
-     */
-    async multiAssetsMargin(params) {
-        return await this.http.privateGET("/fapi/v1/multiAssetsMargin", params)
-    }
-
-    /**
-     * @param {FuturesPostOrder} params 
-     */
-    async newOrder(params) {
-        return await this.http.privatePOST("/fapi/v1/order", params)
-    }
-
-    /**
-     * @param {FuturesPostBatchOrders} params
-     */
-    async newBatchOrders(params) {
-        return await this.http.privatePOST("/fapi/v1/batchOrders", params)
-    }
-
-    /**
-     * @param {FuturesGetOrder} params 
-     */
-    async order(params) {
-        return await this.http.privateGET("/fapi/v1/order", params)
-    }
-
-    /**
-     * @param {FuturesDeleteOrder} params 
-     */
-    async deleteOrder(params) {
-        return await this.http.privateDELETE("/fapi/v1/order", params)
-    }
-
-    /**
-     * @param {FuturesDeleteAllOpenOrders} params 
-     */
-    async deleteAllOpenOrders(params) {
-        return await this.http.privateDELETE("/fapi/v1/allOpenOrders", params)
-    }
-
-    /**
-     * @param {FuturesDeleteBatchOrders} params 
-     */
-    async deleteBatchOrders(params) {
-        return await this.http.privateDELETE("/fapi/v1/batchOrders", params)
-    }
-
-    /**
-     * @param {FuturesPostCountDownCancelAll} params 
-     */
-    async deleteCountDownCancelAll(params) {
-        return await this.http.privatePOST("/fapi/v1/countdownCancelAll", params)
-    }
-
-    /**
-     * @param {FuturesGetOpenOrder} params 
-     */
-    async openOrder(params) {
-        return await this.http.privateGET("/fapi/v1/openOrder", params)
+    async exchangeInfo(params) {
+        return await this.http.publicGET("/api/v3/exchangeInfo", params)
     }
     
-    /**
-     * @param {FuturesGetOpenOrders} params 
-     */
-     async openOrders(params) {
-        return await this.http.privateGET("/fapi/v1/openOrders", params)
-    }
-    
-    /**
-     * @param {FuturesGetAllOrders} params 
-     */
-     async allOrders(params) {
-        return await this.http.privateGET("/fapi/v1/allOrders", params)
-    }
-    
-    /**
-     * @param {FuturesGetBalance} [params] 
-     */
-     async balance(params) {
-        return await this.http.privateGET("/fapi/v2/balance", params)
-    }
-    
-    /**
-     * @param { FuturesGetAccount } [params]
-     */
-     async account(params) {
-        return await this.http.privateGET("/fapi/v2/account", params)
-    }
-    
-    /**
-     * @param {FuturesPostLeverage} params 
-     */
-     async changeLeverage(params) {
-        return await this.http.privatePOST("/fapi/v1/leverage", params)
+    async assetDetail(params) {
+        return await this.http.privateGET("/sapi/v1/asset/assetDetail", params)
     }
 
-    /**
-     * @param { FuturesPostMarginType } params 
-     */
-     async changeMarginType(params) {
-        return await this.http.privatePOST("/fapi/v1/marginType", params)
-    }
-
-    /**
-     * @param {FuturesPostPositionMargin} params 
-     */
-     async changePositionMargin(params) {
-        return await this.http.privatePOST("/fapi/v1/positionMargin", params)
-    }
-    
-    /**
-     * @param {FuturesGetPositionMarginHistory} params 
-     */
-     async positionMarginHistory(params) {
-        return await this.http.privateGET("/fapi/v1/positionMargin/history", params)
-    }
-    
-    /**
-     * @param {FuturesGetPositionRisk} params 
-     */
-     async positionRisk(params) {
-        return await this.http.privateGET("/fapi/v2/positionRisk", params)
-    }
-    
-    /**
-     * @param {FuturesGetUserTrades} params 
-     */
-     async userTrades(params) {
-        return await this.http.privateGET("/fapi/v1/userTrades", params)
-    }
-    
-    /**
-     * @param {FuturesGetIncome} params 
-     */
-     async income(params) {
-        return await this.http.privateGET("/fapi/v1/income", params)
-    }
-    
-    /**
-     * @param {FuturesGetLeverageBracket} params 
-     */
-     async leverageBracket(params) {
-        return await this.http.privateGET("/fapi/v1/leverageBracket", params)
-    }
-    
-    /**
-     * @param {FuturesGetADLQuantile} params 
-     */
-     async adlQuantile(params) {
-        return await this.http.privateGET("/fapi/v1/adlQuantile", params)
-    }
-    
-    /**
-     * @param {FuturesGetForceOrders} params 
-     */
-     async forceOrders(params) {
-        return await this.http.privateGET("/fapi/v1/forceOrders", params)
-    }
-    
-    /**
-     * @param {FuturesGetApiTradingStatus} params 
-     */
-     async apiTradingStatus(params) {
-        return await this.http.privateGET("/fapi/v1/apiTradingStatus", params)
-    }
-    
-    /**
-     * @param {FuturesGetCommissionRate} params 
-     */
-     async commissionRate(params) {
-        return await this.http.privateGET("/fapi/v1/commissionRate", params)
-    }
-    
-    /**
-     * @param {FuturesGetIncomeAsyn} params 
-     */
-     async incomeAsyn(params) {
-        return await this.http.privateGET("/fapi/v1/income/asyn", params)
-    }
-    
-    /**
-     * @param {FuturesGetIncomeAsynId} params 
-     */
-     async incomeAsynId(params) {
-        return await this.http.privateGET("/fapi/v1/income/asyn/id", params)
-    }
-    
-    /**
-     * @param { FuturesPostListenKey } [params]
-     */
-    async newListenKey(params) {
-        return await this.http.privatePOST("/fapi/v1/listenKey", params)
-    }
-
-    /**
-     * @param { FuturesPutListenKey } [params]
-     */
-    async keepAliveListenKey(params) {
-        return await this.http.privatePUT("/fapi/v1/listenKey", params)
-    }
-
-    /**
-     * @param { FuturesDeleteListenKey } [params]
-     */
-    async deleteListenKey(params) {
-        return await this.http.privateDELETE("/fapi/v1/listenKey", params)
+    async test(params) {
+        return await this.http.privateGET("/sapi/v1/capital/config/getall", params)
     }
 }

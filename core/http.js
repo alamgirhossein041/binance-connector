@@ -1,5 +1,3 @@
-import { EventEmitter } from "events"
-import https from "https"
 import CryptoJS from "crypto-js"
 import("../types/http.types.js")
 
@@ -26,7 +24,7 @@ export class Http {
     async request(method, address, params = {}, isPrivate = false) {
         try {
             if (this.isTestNet) {
-                console.log("## Test Net Futures ##")
+                console.log("## Test Net Request ##")
                 address = this.baseURLTest + address
             } else {
                 address = this.baseURL + address
@@ -56,8 +54,10 @@ export class Http {
                 })
                 .join("&")
 
-            let headers = {
-                Accept: "application/x-www-form-urlencoded",
+            let headers = {}
+            
+            if (method != "GET") {
+                headers["Accept"] = "application/x-www-form-urlencoded"
             }
 
             if (isPrivate && this.api_secret) {
@@ -82,6 +82,8 @@ export class Http {
 
             if (data.status == 404) {
                 throw new Error("404 not found")
+            } else if (data.status == 406) {
+                throw new Error("Client error 406: something you should fix")
             }
 
             let body = await data.json()
@@ -95,7 +97,6 @@ export class Http {
                 stack: error.stack,
             }
 
-            console.log(errorMessage)
             return errorMessage
         }
     }

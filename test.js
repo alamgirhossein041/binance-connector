@@ -1,18 +1,23 @@
-import { Futures } from "./index.js"
+import { Spot, Futures } from "./index.js"
 import { config } from "./config.js"
 
-let myFuture = new Futures({
+let spot = new Spot({
+    isTestNet: false,
+    api_key: config.API_KEY,
+    api_secret: config.API_SECRET,
+})
+
+let fu = new Futures({
+    isTestNet: true,
     api_key: config.TEST_API_KEY,
     api_secret: config.TEST_API_SECRET,
-    isTestNet: true,
 })
 
 async function Run() {
-    let klines = await myFuture.klines({
-        interval: "1m",
-        symbol: "BTCUSDT",
-        limit: 10
-    })
-    console.log(klines)
+    let a = await spot.test()
+    console.log(a)
+
+    // let a = await fu.balance()
+    // console.log(a)
 }
 Run()
